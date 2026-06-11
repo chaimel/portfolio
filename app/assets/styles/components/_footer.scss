@@ -1,0 +1,32 @@
+.footer_btm {
+  padding-inline: var(--gutter);
+  background: var(--paper);
+  border-top: 1px solid var(--line-soft);
+}
+
+.footer_btm_con {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 78px;
+  color: #4b5359;
+  font-size: 0.92rem;
+}
+
+.footer_btm a {
+  font-weight: 700;
+  color: var(--teal-dark);
+}
+
+.footer_btm a:hover { color: var(--coral-dark); }
+
+@media (max-width: 580px) {
+  .footer_btm_con {
+    align-items: flex-start;
+    flex-direction: column;
+    justify-content: center;
+    gap: 6px;
+    padding-block: 20px;
+  }
+}

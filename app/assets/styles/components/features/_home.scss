@@ -1,0 +1,19 @@
+// ---------- Home page sections ----------
+// Order matters only for cascade ties — each section's styles are scoped
+// to its own selectors, so the ordering below is just top-to-bottom on page.
+
+@use 'home/banner';
+@use 'home/about';
+@use 'home/projects';
+@use 'home/experience';
+@use 'home/skills';
+@use 'home/contactus';
+
+// ---------- Cross-section responsive ----------
+// Anything that needs to coordinate across multiple home sections goes here.
+// Per-section responsive lives inside that section's own partial.
+//
+// Example:
+// @media (max-width: 920px) {
+//   .about, .projects, .experience { /* shared mobile rule */ }
+// }
