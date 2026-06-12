@@ -5,6 +5,10 @@
   command = "npm run generate"
   publish = ".output/public"
 
+[build.environment]
+  # Vite 7+ (pulled in by Nuxt 3.21) requires Node >= 20.19 — don't rely on the site's default.
+  NODE_VERSION = "22"
+
 # Hashed build assets never change — cache them forever.
 [[headers]]
   for = "/_nuxt/*"
