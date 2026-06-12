@@ -1,0 +1,21 @@
+# dependencies
+node_modules/
+
+# nuxt build output
+.nuxt/
+.output/
+dist
+
+# env
+.env
+.env.*
+
+# logs
+*.log
+
+# netlify cli
+.netlify/
+
+# os
+.DS_Store
+Thumbs.db
