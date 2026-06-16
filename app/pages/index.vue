@@ -1,8 +1,8 @@
 <template>
-  <FeaturesHomeBanner />
-  <FeaturesHomeAbout />
-  <FeaturesHomeProjects />
-  <FeaturesHomeExperience />
-  <FeaturesHomeSkills />
-  <FeaturesHomeContactus />
+	<FeaturesHomeBanner />
+	<FeaturesHomeAbout />
+	<FeaturesHomeProjects />
+	<FeaturesHomeExperience />
+	<FeaturesHomeSkills />
+	<FeaturesHomeContactus />
 </template>
