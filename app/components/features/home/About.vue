@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const points = [
   { label: 'Build.', text: 'Custom WordPress themes and Nuxt.js front ends from design to live launch.' },
-  { label: 'Maintain.', text: 'Reliable updates, fixes, and content changes on production sites.' },
+  { label: 'Review.', text: 'I check AI-assisted code for accessibility, responsiveness, correctness, and maintainability.' },
   { label: 'Improve.', text: 'Faster loads, better responsiveness, cleaner code as the site grows.' },
 ];
 </script>
@@ -19,7 +19,7 @@ const points = [
             My career goal is to keep growing as a full-stack web developer while
             delivering project requirements on time and with quality. I am comfortable
             working with clear direction, learning new tools, and turning designs and
-            website updates into dependable production work.
+            website updates into dependable production work. I use Claude and GPT to explore solutions, then review, test, and refine the code before it ships.
           </p>
           <ul class="about_boxes" role="list">
             <li

@@ -35,7 +35,7 @@
   --font-display: "Space Grotesk", "Inter", system-ui, sans-serif;
 
   // Layout
-  --gutter: 5vw;
+  --gutter: clamp(22px, 5vw, 80px);
 }
 
 @media (max-width: 580px) {

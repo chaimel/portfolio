@@ -4,9 +4,18 @@
 }
 
 .project_info {
-  max-width: 720px;
-  margin: 0 auto 48px;
-  text-align: center;
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1fr);
+  align-items: end;
+  gap: 48px;
+  max-width: 980px;
+  margin: 0 0 48px;
+  text-align: left;
+}
+
+.project_info .section_sub {
+  max-width: 46ch;
+  margin: 0;
 }
 
 .project_boxes {
@@ -135,6 +144,14 @@
 .proj_box6.reveal { transition-delay: 0.40s; }
 
 @media (max-width: 920px) {
+  .project_info {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .project_info .section_sub {
+    max-width: 58ch;
+  }
   .project_boxes {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }

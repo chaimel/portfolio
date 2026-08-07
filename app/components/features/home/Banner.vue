@@ -55,6 +55,11 @@ onBeforeUnmount(() => {
             I build and maintain responsive websites with WordPress, Nuxt.js,
             HTML, CSS, JavaScript, Bootstrap, PHP, and Android Java foundations.
           </p>
+          <p class="bnr_note">
+            <span class="bnr_note_label">How I work</span>
+            AI-assisted development with Claude and GPT — researched, reviewed,
+            tested, and refined by me.
+          </p>
           <div class="bnr_actions" aria-label="Primary actions">
             <a class="button button_primary" href="mailto:chaimelenjambre15@gmail.com">
               <span>Email me</span>

@@ -47,14 +47,15 @@
               <span class="skill_icon" aria-hidden="true">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
               </span>
-              <h3>Delivery</h3>
+              <h3>AI-assisted workflow</h3>
             </div>
-            <p>Turning a brief into dependable, on-time output with clear communication.</p>
+            <p>Using AI to move faster while keeping the decisions, code review, testing, and final quality in my hands.</p>
             <ul class="tech_list">
-              <li>Problem&nbsp;analysis</li>
-              <li>Self-direction</li>
-              <li>On-time&nbsp;delivery</li>
-              <li>Microsoft&nbsp;Office</li>
+              <li>Claude&nbsp;&amp;&nbsp;GPT</li>
+              <li>Code&nbsp;review</li>
+              <li>Testing</li>
+              <li>Accessibility</li>
+              <li>Documentation</li>
             </ul>
           </li>
         </ul>
