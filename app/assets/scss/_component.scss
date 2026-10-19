@@ -1,0 +1,489 @@
+// =============================================================
+// COMPONENT
+// Global styles for every base M-component. Centralised here
+// (instead of scoped blocks inside each SFC) so the whole
+// primitive layer lives in one place. All classes are m-prefixed,
+// so global scope is safe. Consumes the tokens from base/.
+// =============================================================
+
+// -------------------------------------------------------------
+// MText / MHeading
+// Size and weight come from the global typography utilities;
+// these are semantic hooks for overrides.
+// -------------------------------------------------------------
+.m-text {
+	color: inherit;
+}
+
+.m-heading {
+	color: var(--text-primary);
+}
+
+// -------------------------------------------------------------
+// MIcon
+// -------------------------------------------------------------
+.m-icon {
+	display: inline-block;
+	flex: 0 0 auto;
+	max-width: none;
+	overflow: visible;
+	vertical-align: middle;
+
+	&--missing {
+		visibility: hidden;
+	}
+}
+
+// -------------------------------------------------------------
+// MEyebrow
+// The small label above a section heading.
+// -------------------------------------------------------------
+.m-eyebrow {
+	display: inline-flex;
+	align-items: center;
+	gap: 10px;
+	font-family: var(--font-ui);
+	font-size: 13px;
+	line-height: 18px;
+	font-weight: 600;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+	color: var(--brand-strong);
+
+	&__mark {
+		flex: 0 0 auto;
+		width: 22px;
+		height: 2px;
+		border-radius: 2px;
+		background: var(--gradient-brand);
+	}
+
+	&--accent {
+		color: var(--accent-strong);
+	}
+
+	// on ink bands
+	&--sun {
+		color: var(--sun);
+
+		.m-eyebrow__mark {
+			background: var(--sun);
+		}
+	}
+}
+
+// -------------------------------------------------------------
+// MButton
+// -------------------------------------------------------------
+.m-button {
+	--btn-bg: var(--brand-strong);
+	--btn-fg: var(--white);
+	--btn-border: var(--brand-strong);
+
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+
+	border: 1px solid var(--btn-border);
+	border-radius: var(--radius-full);
+	background: var(--btn-bg);
+	color: var(--btn-fg);
+
+	font-family: var(--font-ui);
+	font-weight: 600;
+	line-height: 1;
+	letter-spacing: -0.005em;
+	text-align: center;
+	white-space: nowrap;
+	user-select: none;
+	cursor: pointer;
+
+	transition:
+		background-color 0.2s var(--ease),
+		border-color 0.2s var(--ease),
+		color 0.2s var(--ease),
+		box-shadow 0.2s var(--ease),
+		transform 0.2s var(--ease);
+
+	&__prefix,
+	&__suffix {
+		display: inline-flex;
+		transition: transform 0.25s var(--ease);
+	}
+
+	// a trailing icon leans toward where the button goes
+	&:hover:not(:disabled):not([aria-disabled='true']) .m-button__suffix {
+		transform: translateX(3px);
+	}
+
+	&:disabled,
+	&[aria-disabled='true'] {
+		opacity: 0.5;
+		cursor: not-allowed;
+	}
+}
+
+// --- Sizes ----------------------------------------------------
+.m-button--sm {
+	height: 38px;
+	padding-inline: 16px;
+	font-size: 14px;
+}
+
+.m-button--md {
+	height: 46px;
+	padding-inline: 20px;
+	font-size: 15px;
+}
+
+.m-button--lg {
+	height: 54px;
+	padding-inline: 26px;
+	font-size: 16px;
+}
+
+.m-button--block {
+	display: flex;
+	width: 100%;
+}
+
+// --- Variants -------------------------------------------------
+.m-button--primary {
+	&:hover:not(:disabled):not([aria-disabled='true']) {
+		--btn-bg: var(--brand-deep);
+		--btn-border: var(--brand-deep);
+
+		box-shadow: var(--shadow-pop);
+		transform: translateY(-1px);
+	}
+}
+
+.m-button--secondary {
+	--btn-bg: var(--ink);
+	--btn-fg: var(--white);
+	--btn-border: var(--ink);
+
+	&:hover:not(:disabled):not([aria-disabled='true']) {
+		--btn-bg: var(--ink-raised);
+		--btn-border: var(--ink-raised);
+	}
+}
+
+.m-button--outline {
+	--btn-bg: transparent;
+	--btn-fg: var(--text-primary);
+	--btn-border: var(--border-strong);
+
+	&:hover:not(:disabled):not([aria-disabled='true']) {
+		--btn-bg: var(--white);
+		--btn-border: var(--text-primary);
+	}
+}
+
+.m-button--neutral {
+	--btn-bg: var(--white);
+	--btn-fg: var(--text-primary);
+	--btn-border: var(--border);
+
+	&:hover:not(:disabled):not([aria-disabled='true']) {
+		--btn-bg: var(--canvas);
+		--btn-border: var(--border-strong);
+	}
+}
+
+// Toolbar action: no box until hovered.
+.m-button--ghost {
+	--btn-bg: transparent;
+	--btn-fg: var(--text-primary);
+	--btn-border: transparent;
+
+	&:hover:not(:disabled):not([aria-disabled='true']) {
+		--btn-bg: var(--surface-muted);
+	}
+}
+
+// Inline link-style action: no box, underline on hover.
+.m-button--text {
+	--btn-bg: transparent;
+	--btn-fg: var(--brand-strong);
+	--btn-border: transparent;
+
+	height: auto;
+	padding-inline: 0;
+	border-width: 0;
+	border-radius: var(--radius-xs);
+
+	&:hover:not(:disabled):not([aria-disabled='true']) {
+		--btn-fg: var(--brand-deep);
+
+		text-decoration: underline;
+		text-underline-offset: 4px;
+	}
+}
+
+// White on ink bands.
+.m-button--inverse {
+	--btn-bg: var(--white);
+	--btn-fg: var(--ink);
+	--btn-border: var(--white);
+
+	&:hover:not(:disabled):not([aria-disabled='true']) {
+		--btn-bg: var(--sun);
+		--btn-border: var(--sun);
+
+		transform: translateY(-1px);
+	}
+}
+
+.m-button--inverse-outline {
+	--btn-bg: transparent;
+	--btn-fg: var(--white);
+	--btn-border: var(--on-dark-border);
+
+	&:hover:not(:disabled):not([aria-disabled='true']) {
+		--btn-bg: var(--on-dark-hover);
+		--btn-border: var(--white);
+	}
+}
+
+.m-button--inverse,
+.m-button--inverse-outline {
+	&:focus-visible {
+		outline-color: var(--sun);
+	}
+}
+
+// -------------------------------------------------------------
+// MTag
+// -------------------------------------------------------------
+.m-tag {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	border: 1px solid var(--border);
+	border-radius: var(--radius-full);
+	background: var(--white);
+	color: var(--text-primary);
+	font-family: var(--font-ui);
+	font-weight: 500;
+	line-height: 1;
+	white-space: nowrap;
+
+	.m-icon {
+		color: var(--brand);
+	}
+
+	&--sm {
+		height: 26px;
+		padding: 0 10px;
+		font-size: 12px;
+	}
+
+	&--md {
+		height: 32px;
+		padding: 0 13px;
+		font-size: 13px;
+	}
+
+	&--soft {
+		border-color: transparent;
+		background: var(--brand-soft);
+		color: var(--brand-deep);
+	}
+
+	// on ink bands
+	&--inverse {
+		border-color: var(--on-dark-border);
+		background: var(--on-dark-fill);
+		color: var(--on-dark-muted);
+
+		.m-icon {
+			color: var(--sun);
+		}
+	}
+}
+
+// -------------------------------------------------------------
+// MBadge
+// -------------------------------------------------------------
+.m-badge {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	border-radius: var(--radius-full);
+	font-family: var(--font-ui);
+	font-weight: 600;
+	line-height: 1;
+	letter-spacing: 0.02em;
+	white-space: nowrap;
+
+	&--sm {
+		height: 22px;
+		padding: 0 9px;
+		font-size: 11px;
+	}
+
+	&--md {
+		height: 28px;
+		padding: 0 12px;
+		font-size: 12px;
+	}
+
+	&__dot {
+		width: 7px;
+		height: 7px;
+		border-radius: 50%;
+		background: var(--live);
+	}
+
+	&--neutral {
+		background: var(--surface-muted);
+		color: var(--text-secondary);
+	}
+
+	&--brand {
+		background: var(--brand-soft);
+		color: var(--brand-deep);
+	}
+
+	&--accent {
+		background: var(--accent-soft);
+		color: var(--accent-strong);
+	}
+
+	&--sun {
+		background: var(--sun-soft);
+		color: var(--sun-deep);
+	}
+
+	&--success {
+		background: var(--success-soft);
+		color: var(--success);
+	}
+
+	&--inverse {
+		background: var(--on-dark-hover);
+		color: var(--white);
+	}
+}
+
+// -------------------------------------------------------------
+// MModal
+// The caller fills the dialog; this is only the overlay and shell.
+// -------------------------------------------------------------
+.m-modal {
+	position: fixed;
+	inset: 0;
+	z-index: 100;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 24px;
+
+	&__backdrop {
+		position: absolute;
+		inset: 0;
+		background: var(--overlay);
+		backdrop-filter: blur(4px);
+	}
+
+	&__dialog {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		width: 100%;
+		max-height: calc(100dvh - 48px);
+		overflow: hidden;
+		border-radius: var(--radius-lg);
+		background: var(--white);
+		box-shadow: var(--shadow-float);
+
+		&:focus-visible {
+			outline: none;
+		}
+	}
+}
+
+// fade the overlay, lift the dialog
+.m-modal-enter-active,
+.m-modal-leave-active {
+	transition: opacity 0.25s var(--ease);
+
+	.m-modal__dialog {
+		transition: transform 0.3s var(--ease);
+	}
+}
+
+.m-modal-enter-from,
+.m-modal-leave-to {
+	opacity: 0;
+
+	.m-modal__dialog {
+		transform: translateY(16px) scale(0.98);
+	}
+}
+
+@media only screen and (max-width: 600px) {
+	.m-modal {
+		padding: 10px;
+
+		&__dialog {
+			max-height: calc(100dvh - 20px);
+		}
+	}
+}
+
+// -------------------------------------------------------------
+// MBreadcrumbs
+// -------------------------------------------------------------
+.m-breadcrumbs {
+	&__list {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 4px 0;
+	}
+
+	&__item {
+		display: inline-flex;
+		align-items: center;
+		font-family: var(--font-ui);
+		font-size: 13px;
+		line-height: 20px;
+	}
+
+	&__link {
+		color: var(--text-secondary);
+
+		&:hover {
+			color: var(--brand-strong);
+			text-decoration: underline;
+			text-underline-offset: 3px;
+		}
+	}
+
+	&__current {
+		color: var(--text-muted);
+	}
+
+	&__separator {
+		margin: 0 6px;
+		color: var(--text-muted);
+	}
+
+	&--inverse {
+		.m-breadcrumbs__link {
+			color: var(--on-dark-muted);
+
+			&:hover {
+				color: var(--white);
+			}
+		}
+
+		.m-breadcrumbs__current,
+		.m-breadcrumbs__separator {
+			color: var(--on-dark-subtle);
+		}
+	}
+}

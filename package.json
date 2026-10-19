@@ -6,16 +6,24 @@
     "build": "nuxt build",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
+    "icons:build": "node app/icons/build-icons.js",
+    "prebuild": "node app/icons/build-icons.js",
+    "predev": "node app/icons/build-icons.js",
+    "pregenerate": "node app/icons/build-icons.js",
     "preview": "nuxt preview",
+    "test": "node --test tests/projects.test.ts",
     "typecheck": "nuxt typecheck",
     "postinstall": "nuxt prepare"
   },
+  "dependencies": {
+    "nuxt": "^4.6.2",
+    "vue": "^3.5.44",
+    "vue-router": "^5.4.0"
+  },
   "devDependencies": {
-    "nuxt": "^3.13.0",
-    "sass": "^1.79.0",
-    "typescript": "^5.6.0",
-    "vue": "^3.5.0",
-    "vue-router": "^4.4.0",
-    "vue-tsc": "^2.1.10"
+    "@types/node": "^24.19.2",
+    "sass": "^1.105.0",
+    "typescript": "^5.9.3",
+    "vue-tsc": "^3.3.13"
   }
 }

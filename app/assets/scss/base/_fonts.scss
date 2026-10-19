@@ -1,0 +1,12 @@
+// =============================================================
+// FONTS
+// Web-font loading. Forwarded FIRST in base/_index.scss so this
+// CSS @import lands at the very top of the compiled output
+// (a CSS @import is ignored by browsers if any rule precedes it).
+// Family tokens (--font-base etc.) live in base/_preset.scss.
+//
+// Space Grotesk — headings, numbers and the logo
+// Inter         — reading copy and UI
+// =============================================================
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');

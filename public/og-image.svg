@@ -41,19 +41,19 @@
 
     <!-- status pill -->
     <g transform="translate(120, 18)">
-      <rect width="320" height="56" rx="28" fill="#ffffff" stroke="#0d5959" stroke-opacity="0.18"/>
+      <rect width="430" height="56" rx="28" fill="#ffffff" stroke="#0d5959" stroke-opacity="0.18"/>
       <circle cx="34" cy="28" r="7" fill="#2eb86b"/>
-      <text x="58" y="29" font-size="22" font-weight="600" fill="#0d5959" dominant-baseline="central">Available for new front-end work</text>
+      <text x="58" y="29" font-size="22" font-weight="600" fill="#0d5959" dominant-baseline="central">Available for web developer work</text>
     </g>
 
     <!-- name -->
     <text x="0" y="232" font-size="104" font-weight="700" fill="url(#name)" letter-spacing="-3">Chaimel Enjambre</text>
 
     <!-- role -->
-    <text x="0" y="300" font-size="40" font-weight="600" fill="#2b3136">Front-End Developer · Cebu, PH</text>
+    <text x="0" y="300" font-size="40" font-weight="600" fill="#2b3136">Web Developer · Front-End Focus · Cebu, PH</text>
 
     <!-- tagline -->
-    <text x="0" y="356" font-size="29" font-weight="500" fill="#586069">Clean, fast, responsive websites — WordPress, Nuxt.js &amp; modern front-end tooling.</text>
+    <text x="0" y="356" font-size="29" font-weight="500" fill="#586069">Nuxt, Vue, Laravel &amp; WordPress — 100+ websites shipped.</text>
   </g>
 
   <!-- accent bar -->

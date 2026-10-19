@@ -1,0 +1,83 @@
+// =============================================================
+// COLORS
+// Teal for action, coral and sun as accents, ink for the dark
+// bands — on a warm paper canvas. Accents are used sparingly.
+//
+// Contrast rules (WCAG AA):
+//   --brand         #137c7b is 5.0:1 on white and 4.7:1 on canvas, so it
+//                   can carry small text, icons and focus rings.
+//   --brand-strong  fills primary buttons under white labels (8.1:1).
+//   --accent        #df5f4f is 3.6:1 on white — display text, marks and
+//                   fills only. Small coral text uses --accent-strong (5.5:1).
+//   --sun           reads on ink, never on white. Text on --sun-soft
+//                   uses --sun-deep (6:1).
+//
+// Single source of truth: edit the $colors map and the matching CSS
+// custom properties are generated into :root automatically.
+// =============================================================
+
+$colors: (
+	// --- Brand: teal -------------------------------------------
+	"brand": #137c7b,
+	"brand-strong": #0d5959,
+	"brand-deep": #074545,
+	"brand-soft": #e1efeb,
+	"brand-tint": #eef6f3,
+
+	// --- Accents -----------------------------------------------
+	"accent": #df5f4f,           // coral
+	"accent-strong": #b8412f,
+	"accent-soft": #fbe8e4,
+	"sun": #f0b94e,
+	"sun-deep": #7a560f,
+	"sun-soft": #fdf2da,
+
+	// --- Ink (dark bands) --------------------------------------
+	"ink": #14191c,
+	"ink-soft": #1b2226,
+	"ink-raised": #232c31,
+
+	// --- Surfaces ----------------------------------------------
+	"white": #ffffff,
+	"canvas": #f7f8f6,           // the page
+	"canvas-alt": #eef3ef,       // alternate bands
+	"surface-muted": #f1f3f0,    // wells, image placeholders
+
+	// --- Rules -------------------------------------------------
+	"border": #e0e6e2,
+	"border-strong": #c9d2cc,
+
+	// --- Text --------------------------------------------------
+	"text-primary": #171b1f,
+	"text-secondary": #4a5157,   // 8.1:1 on white
+	"text-muted": #5e666c,       // 5.2:1 on canvas-alt — the floor for small text
+	"text-inverse": #ffffff,
+
+	// --- On dark (ink bands) -----------------------------------
+	"on-dark-muted": rgba(255, 255, 255, 0.74),
+	"on-dark-subtle": rgba(255, 255, 255, 0.56),
+	"on-dark-border": rgba(255, 255, 255, 0.22),
+	"on-dark-rule": rgba(255, 255, 255, 0.12),
+	"on-dark-hover": rgba(255, 255, 255, 0.08),
+	"on-dark-fill": rgba(255, 255, 255, 0.05),
+
+	// --- Glows (soft light behind dark bands) ------------------
+	"brand-glow": rgba(19, 124, 123, 0.45),
+	"accent-glow": rgba(223, 95, 79, 0.28),
+
+	// --- Status (always paired with an icon or a word) ---------
+	"success": #17693f,          // text on --success-soft (5.9:1)
+	"success-soft": #e5f4eb,
+	"live": #2eb86b,             // status dots only, never text
+
+	// --- Overlays ----------------------------------------------
+	"overlay": rgba(20, 25, 28, 0.5),
+	"header-glass": rgba(247, 248, 246, 0.84),
+);
+
+// Generate CSS variables in :root.
+:root {
+	@each $name, $value in $colors {
+		--#{$name}: #{$value};
+	}
+}
