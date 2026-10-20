@@ -141,7 +141,7 @@ const kind_label = computed(() => (props.project.kind === 'web-app' ? 'Web app' 
 		padding-top: 18px;
 		font-size: clamp(42px, 5.4vw, 76px);
 		line-height: 1.02;
-		letter-spacing: -0.04em;
+		letter-spacing: -0.02em;
 	}
 
 	&__lede {

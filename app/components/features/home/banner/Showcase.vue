@@ -28,13 +28,13 @@
 <script setup lang="ts">
 import MBrowserShot from '~/components/core/project/MBrowserShot.vue'
 import MPhoneShot from '~/components/core/project/MPhoneShot.vue'
-import { featuredProject, websites } from '~/data/features/projects'
+import { featuredProject, moreWork } from '~/data/features/projects'
 import type { Project } from '~/types/features/project'
 import { hostLabel } from '~/utils/format'
 
 // The featured web app up front, two live websites fanned out behind
 // it, and the app again on a phone.
-const live_sites = websites.filter(site => site.status === 'live')
+const live_sites = moreWork.filter(site => site.kind === 'website' && site.status === 'live')
 const left = (live_sites.find(site => site.slug === 'smt-logistics') ?? live_sites[0]) as Project
 const right = (live_sites.find(site => site.slug === 'beulahland-christian-academy') ?? live_sites[1]) as Project
 </script>

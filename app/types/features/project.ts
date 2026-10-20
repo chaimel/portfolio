@@ -16,6 +16,14 @@ type ProjectKind = 'web-app' | 'website'
 // but drops the link
 type ProjectStatus = 'live' | 'offline'
 
+// what I did on a project I didn't build end to end: cards say
+// "Maintained at", list the parts, and show the note
+interface ProjectScope {
+	parts: string[]
+	// e.g. why the screenshot can't show those parts
+	note?: string
+}
+
 interface ProjectCallout {
 	icon: MIconName
 	text: string
@@ -84,6 +92,7 @@ interface Project {
 	phone?: ProjectImage
 	summary?: string
 	role?: string
+	scope?: ProjectScope
 	// short highlight bullets for the featured spot on the home page
 	features?: string[]
 	// two short labels pinned over the featured screenshot
@@ -95,6 +104,7 @@ export type {
 	ProjectImage,
 	ProjectKind,
 	ProjectStatus,
+	ProjectScope,
 	ProjectCallout,
 	CaseStudyStep,
 	CaseStudyScreen,

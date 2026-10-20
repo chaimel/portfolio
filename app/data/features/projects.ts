@@ -1,9 +1,11 @@
 // Every project in the portfolio. Duelo Battleground is the featured
-// web app with a case study; the WordPress sites link straight out.
+// web app with a case study; Musticker (maintained at Glophics) and the
+// WordPress sites link straight out.
 // Images live in public/images/projects (see README → Images).
 //
 // `stack` lists what each live site actually loads (checked October
-// 2026: theme and plugin folders, script tags, Duelo's JS bundle).
+// 2026: theme and plugin folders, script tags, Duelo's and Musticker's
+// JS bundles; Musticker's API answers with Laravel's session cookies).
 // The WordPress themes are custom builds — each site has its own.
 // `accent` is each client's brand color, sampled from its screenshot.
 import type { Project, ProjectImage } from '~/types/features/project'
@@ -134,8 +136,27 @@ const duelo: Project = {
 	},
 }
 
-// In the order the work grid shows them; sites no longer online go last.
-const websites: Project[] = [
+// In the order the work stack shows them: current work first, sites no
+// longer online last.
+const moreWork: Project[] = [
+	{
+		slug: 'musticker',
+		accent: '#f5df4d',
+		title: 'Musticker',
+		kind: 'web-app',
+		status: 'live',
+		category: 'Custom sticker shop',
+		built_at: 'Glophics',
+		summary: 'Glophics’ own online sticker print shop for Korea. Customers order die-cut, roll, and sheet stickers, approve a proof, and get them made today and shipped tomorrow.',
+		scope: {
+			parts: ['Admin panel', 'Customer account pages', 'Category pages'],
+			note: 'Mostly maintenance. The admin panel sits behind a staff login, so the preview shows the public storefront.',
+		},
+		languages: ['PHP', 'JavaScript', 'HTML', 'CSS'],
+		stack: ['Nuxt', 'Vue 3', 'Pinia', 'Nuxt i18n', 'Laravel', 'AWS S3'],
+		live_url: 'https://www.musticker.com/kr/',
+		image: { src: '/images/projects/musticker.webp', width: 800, height: 1789, alt: 'Musticker storefront home page' },
+	},
 	{
 		slug: 'beulahland-christian-academy',
 		accent: '#e39b2d',
@@ -222,10 +243,10 @@ const websites: Project[] = [
 ]
 
 const featuredProject = duelo
-const projects: Project[] = [duelo, ...websites]
+const projects: Project[] = [duelo, ...moreWork]
 
 export {
 	featuredProject,
-	websites,
+	moreWork,
 	projects,
 }

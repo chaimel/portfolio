@@ -16,6 +16,12 @@ const contact: ContactDetails = {
 	resume: '/Chaimel-Enjambre-Resume.pdf',
 }
 
+// Where I am, for the live local time on the page.
+const localTime = {
+	timezone: 'Asia/Manila',
+	place: 'Cebu, PH',
+}
+
 // Every link lands on a home-page section, so they work from any page.
 const primaryNav: NavLink[] = [
 	{ label: 'Work', to: '/#work', section: 'work' },
@@ -31,5 +37,6 @@ export {
 	siteTitle,
 	siteDescription,
 	contact,
+	localTime,
 	primaryNav,
 }

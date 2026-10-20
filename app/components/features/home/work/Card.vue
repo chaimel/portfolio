@@ -15,7 +15,7 @@
 					<MBadge v-if="is_offline" tone="inverse" size="sm">Site offline</MBadge>
 					<MBadge v-else tone="inverse" size="sm" dot>Live</MBadge>
 					<MText variant="span" size="small" class="card__meta">
-						{{ props.project.category }}<template v-if="props.project.built_at"> · Built at {{ props.project.built_at }}</template>
+						{{ props.project.category }}<template v-if="props.project.built_at"> · {{ made }} at {{ props.project.built_at }}</template>
 					</MText>
 				</div>
 				<MHeading :id="`work-card-${props.project.slug}`" variant="3" class="card__title">
@@ -26,6 +26,10 @@
 				</MText>
 
 				<dl class="card__tech">
+					<div v-if="props.project.scope" class="card__tech-row">
+						<dt>My part</dt>
+						<dd class="card__parts">{{ props.project.scope.parts.join(' · ') }}</dd>
+					</div>
 					<div class="card__tech-row">
 						<dt>Languages</dt>
 						<dd>
@@ -47,6 +51,11 @@
 						</dd>
 					</div>
 				</dl>
+
+				<MText v-if="props.project.scope?.note" size="small" color="--on-dark-subtle" class="card__note">
+					<MIcon name="light-lock" size="xs" />
+					{{ props.project.scope.note }}
+				</MText>
 
 				<div class="card__actions">
 					<MButton variant="inverse" @click="emit('preview')">
@@ -96,6 +105,8 @@ const emit = defineEmits<{
 }>()
 
 const is_offline = computed(() => props.project.status === 'offline')
+// a project I only worked part of was maintained there, not built
+const made = computed(() => props.project.scope ? 'Maintained' : 'Built')
 const host = computed(() => hostLabel(props.project.live_url))
 const number = computed(() => String(props.index + 1).padStart(2, '0'))
 const total = computed(() => String(props.total).padStart(2, '0'))
@@ -169,7 +180,7 @@ const card_style = computed(() => ({
 		font-size: 80px;
 		font-weight: 700;
 		line-height: 0.9;
-		letter-spacing: -0.05em;
+		letter-spacing: -0.03em;
 		color: transparent;
 		-webkit-text-stroke: 1.5px color-mix(in srgb, var(--project-accent) 55%, var(--white));
 	}
@@ -199,7 +210,7 @@ const card_style = computed(() => ({
 		padding-top: 10px;
 		font-size: clamp(28px, 2.6vw, 40px);
 		line-height: 1.08;
-		letter-spacing: -0.03em;
+		letter-spacing: -0.015em;
 		color: var(--white);
 	}
 
@@ -235,6 +246,28 @@ const card_style = computed(() => ({
 		display: flex;
 		flex-wrap: wrap;
 		gap: 6px;
+	}
+
+	&__parts {
+		padding-top: 2px;
+		font-family: var(--font-ui);
+		font-size: 14px;
+		font-weight: 600;
+		line-height: 20px;
+		color: var(--white);
+	}
+
+	&__note {
+		display: flex;
+		align-items: flex-start;
+		gap: 8px;
+		max-width: 460px;
+		padding-top: 16px;
+
+		.m-icon {
+			flex-shrink: 0;
+			margin-top: 3px;
+		}
 	}
 
 	&__actions {

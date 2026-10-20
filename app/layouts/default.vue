@@ -6,10 +6,12 @@
 			<slot />
 		</main>
 		<Footer />
+		<BackToTop />
 	</div>
 </template>
 
 <script setup lang="ts">
+import BackToTop from '~/components/layout/BackToTop.vue'
 import Footer from '~/components/layout/Footer.vue'
 import Header from '~/components/layout/Header.vue'
 import ScrollProgress from '~/components/layout/ScrollProgress.vue'

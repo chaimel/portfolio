@@ -263,7 +263,7 @@ onBeforeUnmount(() => {
 		font-family: var(--font-display);
 		font-size: 22px;
 		font-weight: 600;
-		letter-spacing: -0.02em;
+		letter-spacing: -0.01em;
 		color: var(--text-primary);
 
 		.m-icon {

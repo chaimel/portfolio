@@ -37,12 +37,20 @@
 					</div>
 				</div>
 
+				<!-- the name across the full width; SVG so it always fits exactly -->
+				<svg class="footer__wordmark" viewBox="0 0 1200 140" aria-hidden="true" focusable="false">
+					<defs>
+						<linearGradient id="footer-wordmark-fill" x1="0" y1="0" x2="1" y2="0">
+							<stop offset="0" stop-color="currentColor" stop-opacity="0.9" />
+							<stop offset="1" stop-color="currentColor" stop-opacity="0.25" />
+						</linearGradient>
+					</defs>
+					<text x="0" y="118" font-size="128" textLength="1200" lengthAdjust="spacingAndGlyphs" fill="url(#footer-wordmark-fill)">{{ siteName.toUpperCase() }}</text>
+				</svg>
+
 				<div class="footer__base">
 					<span class="footer__note">&copy; {{ year }} {{ siteName }} · Built with Nuxt, Vue &amp; SCSS</span>
-					<a href="#main-content" class="footer__top-link" @click.prevent="toTop">
-						Back to top
-						<MIcon name="light-arrow-up" size="sm" />
-					</a>
+					<span class="footer__note">{{ localTime.place }} · {{ time || '—' }}</span>
 				</div>
 			</div>
 		</div>
@@ -51,14 +59,10 @@
 
 <script setup lang="ts">
 import Logo from '~/components/layout/Logo.vue'
-import { contact, primaryNav, siteName, siteRole } from '~/data/features/site'
+import { contact, localTime, primaryNav, siteName, siteRole } from '~/data/features/site'
 
 const year = 2026
-
-function toTop() {
-	const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-	window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' })
-}
+const time = useLocalTime(localTime.timezone)
 </script>
 
 <style lang="scss" scoped>
@@ -128,6 +132,18 @@ function toTop() {
 		}
 	}
 
+	// the gradient runs from teal-white to a faint fade
+	&__wordmark {
+		display: block;
+		width: 100%;
+		height: auto;
+		margin-top: 56px;
+		color: color-mix(in srgb, var(--brand) 55%, var(--white));
+		font-family: var(--font-display);
+		font-weight: 700;
+		letter-spacing: -0.02em;
+	}
+
 	&__base {
 		display: flex;
 		align-items: center;
@@ -143,28 +159,6 @@ function toTop() {
 		line-height: 20px;
 		color: var(--on-dark-subtle);
 	}
-
-	&__top-link {
-		display: inline-flex;
-		align-items: center;
-		gap: 8px;
-		font-family: var(--font-ui);
-		font-size: 14px;
-		font-weight: 600;
-		color: var(--sun);
-
-		.m-icon {
-			transition: transform 0.25s var(--ease);
-		}
-
-		&:hover .m-icon {
-			transform: translateY(-3px);
-		}
-
-		&:focus-visible {
-			outline-color: var(--sun);
-		}
-	}
 }
 
 @media only screen and (max-width: 1024px) {
@@ -179,8 +173,9 @@ function toTop() {
 
 @media only screen and (max-width: 600px) {
 	.footer {
+		// room under the last line for the floating back-to-top button
 		&__con {
-			padding-top: 56px;
+			padding: 56px 0 80px;
 		}
 
 		&__top {

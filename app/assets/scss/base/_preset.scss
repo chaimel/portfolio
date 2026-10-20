@@ -1,10 +1,10 @@
 /* preset — tokens and base document defaults (uses the color vars) */
 :root {
-	// Space Grotesk carries headings and numbers; Inter carries reading
-	// copy and UI. Fallbacks keep both roles readable when neither loads.
-	--font-display: 'Space Grotesk', 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
-	--font-ui: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-	--font-base: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+	// Bricolage Grotesque carries headings and numbers; Geist carries
+	// reading copy and UI. Fallbacks keep both roles readable when neither loads.
+	--font-display: 'Bricolage Grotesque', 'Geist', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+	--font-ui: 'Geist', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+	--font-base: 'Geist', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 	--font-mono: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
 
 	--radius-xs: 6px;
@@ -41,7 +41,7 @@ body {
 	font-family: var(--font-base);
 	font-size: 16px;
 	line-height: 1.65;
-	letter-spacing: -0.005em;
+	letter-spacing: 0;
 	color: var(--text-primary);
 	background: var(--canvas);
 	-webkit-font-smoothing: antialiased;

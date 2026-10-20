@@ -28,16 +28,16 @@
 			 stacks over it (cards must be direct children for sticky to work) -->
 		<div ref="stack" class="work__stack">
 			<Card
-				v-for="(project, position) in websites"
+				v-for="(project, position) in moreWork"
 				:key="project.slug"
 				:project="project"
 				:index="position"
-				:total="websites.length"
+				:total="moreWork.length"
 				@preview="openViewer(position)"
 			/>
 		</div>
 
-		<Viewer v-model:index="viewer_index" :projects="websites" name="project-viewer" />
+		<Viewer v-model:index="viewer_index" :projects="moreWork" name="project-viewer" />
 	</section>
 </template>
 
@@ -45,7 +45,7 @@
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import MSectionHead from '~/components/core/section/MSectionHead.vue'
 import { hero, work } from '~/data/features/home'
-import { websites } from '~/data/features/projects'
+import { moreWork } from '~/data/features/projects'
 import Card from './Card.vue'
 import Viewer from './Viewer.vue'
 
@@ -53,8 +53,8 @@ const { openModal } = useModal()
 
 const counts = computed(() => [
 	{ value: hero.sites_shipped, label: 'WordPress sites shipped' },
-	{ value: String(websites.length), label: 'Shown here' },
-	{ value: String(websites.filter(site => site.status === 'live').length), label: 'Still live' },
+	{ value: String(moreWork.length), label: 'Shown here' },
+	{ value: String(moreWork.filter(site => site.status === 'live').length), label: 'Still live' },
 ])
 
 const viewer_index = ref(0)
@@ -138,7 +138,7 @@ onBeforeUnmount(() => {
 			font-size: 32px;
 			font-weight: 700;
 			line-height: 1;
-			letter-spacing: -0.03em;
+			letter-spacing: -0.015em;
 			color: var(--text-primary);
 		}
 

@@ -2,7 +2,7 @@
 // wherever the data holds them all; the sites-shipped total is typed in
 // because it's far more than this portfolio lists. The story, education,
 // and seminars come from the résumé in public/.
-import type { ContentFact, ContentPoint, Credential, Role, ToolGroup } from '~/types/features/content'
+import type { ContentPoint, Credential, Role, ToolGroup } from '~/types/features/content'
 
 const hero = {
 	status: 'Available for web developer roles and freelance work',
@@ -19,8 +19,8 @@ const hero = {
 }
 
 const work = {
-	title: `A few of the ${hero.sites_shipped} websites I’ve shipped.`,
-	lede: 'I’ve built more than a hundred custom WordPress sites. Here are six — for childcare, retail, fishing, logistics, healthcare, and aerial photography clients — with the languages and tools behind each one.',
+	title: `What I maintain now, and a few of the ${hero.sites_shipped} sites I’ve shipped.`,
+	lede: 'At Glophics I keep Musticker’s admin panel and account pages running. Before that I built more than a hundred custom WordPress sites — here are six, for childcare, retail, fishing, logistics, healthcare, and aerial photography clients — with the languages and tools behind each one.',
 	hint: 'Scroll on — each project stacks over the last. Hover a screenshot to scroll its site.',
 }
 
@@ -38,22 +38,16 @@ const about = {
 		'In 2019 I tested apps at Spingine Corporation, where I picked up practical QA habits. In 2021 I joined Proweaver as a front-end WordPress developer, building custom WordPress websites with HTML, CSS, and JavaScript — all told, I’ve shipped more than 100 WordPress sites. Since October 2022 I’ve been a web developer at Glophics, working on both sides of the stack: Nuxt.js on the front end and Laravel on the back end.',
 		'My goal is to keep growing into a full-stack web developer who delivers project requirements on time and with quality. I’m comfortable working with clear direction, learning new tools, and turning designs and website updates into dependable production work.',
 	],
+	// the career objective from the résumé, in one line
+	goal: 'Grow into a full-stack web developer who delivers on time and with quality.',
 	approach: {
 		title: 'How I work',
-		text: 'Three habits I bring to every project, from a WordPress update to a booking app.',
 	},
 	ai: {
 		title: 'AI-assisted, human-reviewed',
 		text: 'I use Claude and GPT to explore solutions, then review, test, and refine the code before it ships.',
 	},
 }
-
-const aboutFacts: ContentFact[] = [
-	{ icon: 'light-map-pin', label: 'Based in', value: 'Ginatilan, Cebu, Philippines' },
-	{ icon: 'light-graduation-cap', label: 'Studied', value: 'BS Information Technology, University of Cebu' },
-	{ icon: 'light-flag', label: 'Started', value: '2018 — IT Trainee at SystemsCore Inc.' },
-	{ icon: 'light-briefcase', label: 'Now', value: 'Web Developer at Glophics' },
-]
 
 const roles: Role[] = [
 	{
@@ -62,6 +56,7 @@ const roles: Role[] = [
 		title: 'Web Developer',
 		org: 'Glophics',
 		summary: 'Builds and maintains websites and web apps across the stack — Nuxt.js front ends and Laravel back ends.',
+		tags: ['Nuxt.js', 'Vue', 'Laravel', 'PHP'],
 	},
 	{
 		start: 'Feb 2021',
@@ -69,6 +64,7 @@ const roles: Role[] = [
 		title: 'Front-End WordPress Developer',
 		org: 'Proweaver',
 		summary: 'Created custom WordPress websites using HTML, CSS, JavaScript, and theme workflows.',
+		tags: ['WordPress', 'PHP', 'HTML', 'CSS', 'JavaScript'],
 	},
 	{
 		start: 'Jun 2019',
@@ -76,6 +72,7 @@ const roles: Role[] = [
 		title: 'App Tester',
 		org: 'Spingine Corporation',
 		summary: 'Tested applications, found bugs, and learned practical QA habits for software delivery.',
+		tags: ['Testing', 'QA'],
 	},
 	{
 		start: 'Jun 2018',
@@ -83,11 +80,13 @@ const roles: Role[] = [
 		title: 'IT Trainee (Software Developer)',
 		org: 'SystemsCore Inc.',
 		summary: 'My first role: an on-the-job software development traineeship, in an IT and computer technology environment.',
+		tags: ['Software development'],
 	},
 ]
 
 const experience = {
 	title: 'Web development across Nuxt.js, Laravel, WordPress, and testing.',
+	companies_label: 'Where I’ve worked',
 	education_title: 'Education & training',
 }
 
@@ -123,7 +122,8 @@ const toolkit = {
 }
 
 const contactCta = {
-	title: 'Let’s build something clear, responsive, and dependable.',
+	title: 'Let’s work together.',
+	lede: 'Clear, responsive, and dependable — from a WordPress site to a booking app.',
 	text: 'I’m open to web developer roles and freelance work. Email is the fastest way to reach me — usually a reply within a day.',
 }
 
@@ -131,7 +131,6 @@ export {
 	hero,
 	work,
 	about,
-	aboutFacts,
 	approachPoints,
 	experience,
 	roles,

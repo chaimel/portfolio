@@ -95,7 +95,7 @@ function goTo(path: string) {
 		font-size: 96px;
 		font-weight: 700;
 		line-height: 1;
-		letter-spacing: -0.04em;
+		letter-spacing: -0.02em;
 		background: var(--gradient-brand);
 		-webkit-background-clip: text;
 		background-clip: text;

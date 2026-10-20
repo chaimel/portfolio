@@ -4,45 +4,63 @@
 
 		<div class="wrapper">
 			<div class="contact__con">
-				<div class="contact__main">
+				<div class="contact__top">
 					<MEyebrow tone="sun">Contact</MEyebrow>
-					<MHeading id="contact-title" variant="2" color="--white" class="contact__title">
-						{{ contactCta.title }}
-					</MHeading>
-					<MText size="large" color="--on-dark-muted" class="contact__text">{{ contactCta.text }}</MText>
+					<span class="contact__status">
+						<span class="contact__dot" aria-hidden="true" />
+						{{ hero.status }}
+					</span>
+				</div>
 
-					<div class="contact__actions">
-						<MButton :href="`mailto:${contact.email}`" variant="inverse" size="lg">
-							<template #prefix>
-								<MIcon name="light-mail" size="sm" />
-							</template>
-							Email me
-						</MButton>
-						<MButton variant="inverse-outline" size="lg" @click="copyEmail">
-							<template #prefix>
-								<MIcon :name="copied ? 'light-check' : 'light-copy'" size="sm" />
-							</template>
-							{{ copied ? 'Copied' : 'Copy email address' }}
-						</MButton>
-					</div>
+				<MHeading id="contact-title" variant="2" color="--white" class="contact__title">
+					{{ contactCta.title }}
+				</MHeading>
+				<MText size="xlarge" color="--on-dark-muted" class="contact__lede">
+					{{ contactCta.lede }} {{ contactCta.text }}
+				</MText>
+
+				<!-- a rule with the big round button riding on it -->
+				<div class="contact__rule">
+					<a :href="`mailto:${contact.email}`" class="contact__orb">
+						<MIcon name="light-arrow-up-right" size="lg" />
+						Get in touch
+					</a>
+				</div>
+
+				<div class="contact__pills">
+					<a :href="`mailto:${contact.email}`" class="contact__pill">
+						<MIcon name="light-mail" size="sm" />
+						{{ contact.email }}
+					</a>
+					<a :href="contact.phone_href" class="contact__pill">
+						<MIcon name="light-phone" size="sm" />
+						{{ contact.phone }}
+					</a>
+					<button type="button" class="contact__pill contact__pill--ghost" @click="copyEmail">
+						<MIcon :name="copied ? 'light-check' : 'light-copy'" size="sm" />
+						{{ copied ? 'Copied' : 'Copy email' }}
+					</button>
 					<span class="sr-only" role="status">{{ copied ? 'Email address copied' : '' }}</span>
 				</div>
 
-				<ul class="contact__details">
-					<li v-for="detail in details" :key="detail.label">
-						<component
-							:is="detail.href ? 'a' : 'div'"
-							:href="detail.href"
-							:class="['contact__detail', { 'contact__detail--link': detail.href }]"
-						>
-							<span class="contact__icon" aria-hidden="true">
-								<MIcon :name="detail.icon" size="md" />
-							</span>
-							<span class="contact__label">{{ detail.label }}</span>
-							<span class="contact__value">{{ detail.value }}</span>
-						</component>
-					</li>
-				</ul>
+				<dl class="contact__facts">
+					<div>
+						<dt>Based in</dt>
+						<dd>{{ contact.location }}</dd>
+					</div>
+					<div>
+						<dt>Local time</dt>
+						<dd>{{ time || '—' }} · {{ localTime.place }}</dd>
+					</div>
+					<div>
+						<dt>Résumé</dt>
+						<dd>
+							<a :href="contact.resume" target="_blank" rel="noopener" class="contact__link">
+								Download PDF<span class="sr-only"> (opens in a new tab)</span>
+							</a>
+						</dd>
+					</div>
+				</dl>
 			</div>
 		</div>
 	</section>
@@ -50,15 +68,10 @@
 
 <script setup lang="ts">
 import { onBeforeUnmount, ref } from 'vue'
-import { contactCta } from '~/data/features/home'
-import { contact } from '~/data/features/site'
-import type { MIconName } from '~/types/base/ui'
+import { contactCta, hero } from '~/data/features/home'
+import { contact, localTime } from '~/data/features/site'
 
-const details: { icon: MIconName, label: string, value: string, href?: string }[] = [
-	{ icon: 'light-mail', label: 'Email', value: contact.email, href: `mailto:${contact.email}` },
-	{ icon: 'light-phone', label: 'Phone', value: contact.phone, href: contact.phone_href },
-	{ icon: 'light-map-pin', label: 'Location', value: contact.location },
-]
+const time = useLocalTime(localTime.timezone)
 
 const copied = ref(false)
 let reset_timer: ReturnType<typeof setTimeout> | null = null
@@ -98,115 +111,258 @@ onBeforeUnmount(() => {
 		z-index: -1;
 		pointer-events: none;
 		background:
-			radial-gradient(30rem 22rem at 100% 0%, var(--brand-glow), transparent 70%),
-			radial-gradient(26rem 20rem at 0% 100%, var(--accent-glow), transparent 70%);
+			radial-gradient(40rem 28rem at 100% 0%, var(--brand-glow), transparent 70%),
+			radial-gradient(34rem 24rem at 0% 100%, var(--accent-glow), transparent 70%);
 	}
 
 	&__con {
-		display: grid;
-		grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
-		align-items: end;
-		gap: 64px;
-		padding: 128px 0;
+		padding: 128px 0 96px;
 	}
 
+	&__top {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		flex-wrap: wrap;
+		gap: 12px 24px;
+	}
+
+	&__status {
+		display: inline-flex;
+		align-items: center;
+		gap: 10px;
+		padding: 8px 14px;
+		border: 1px solid var(--on-dark-rule);
+		border-radius: var(--radius-full);
+		background: var(--on-dark-fill);
+		font-family: var(--font-ui);
+		font-size: 13px;
+		font-weight: 600;
+		color: var(--on-dark-muted);
+	}
+
+	&__dot {
+		position: relative;
+		width: 8px;
+		height: 8px;
+		border-radius: 50%;
+		background: var(--live);
+
+		&::after {
+			content: '';
+			position: absolute;
+			inset: -5px;
+			border-radius: 50%;
+			background: var(--live);
+			opacity: 0.4;
+			animation: contact-pulse 1.8s ease-out infinite;
+		}
+	}
+
+	// the headline is the section
 	&__title {
-		max-width: 720px;
-		padding-top: 18px;
-		font-size: clamp(36px, 4.4vw, 58px);
-		line-height: 1.05;
+		padding-top: 28px;
+		font-size: clamp(56px, 10vw, 152px);
+		line-height: 0.95;
+		letter-spacing: -0.03em;
 	}
 
-	&__text {
-		max-width: 560px;
-		padding-top: 20px;
+	&__lede {
+		max-width: 640px;
+		padding-top: 24px;
 	}
 
-	&__actions {
+	// --- Rule + round button ----------------------------------
+	&__rule {
+		position: relative;
+		height: 1px;
+		margin: 104px 0 72px;
+		background: var(--on-dark-border);
+	}
+
+	&__orb {
+		position: absolute;
+		top: 50%;
+		right: 8%;
+		display: grid;
+		place-items: center;
+		place-content: center;
+		gap: 6px;
+		width: 176px;
+		height: 176px;
+		border-radius: 50%;
+		background: linear-gradient(150deg, var(--brand), var(--brand-strong));
+		box-shadow: var(--shadow-float);
+		font-family: var(--font-display);
+		font-size: 17px;
+		font-weight: 600;
+		color: var(--white);
+		transform: translateY(-50%);
+		transition:
+			background 0.3s var(--ease),
+			color 0.3s var(--ease),
+			transform 0.4s var(--ease);
+
+		.m-icon {
+			justify-self: center;
+			transition: transform 0.4s var(--ease);
+		}
+
+		&:hover {
+			background: var(--sun);
+			color: var(--ink);
+			transform: translateY(-50%) scale(1.06);
+
+			.m-icon {
+				transform: rotate(45deg);
+			}
+		}
+
+		&:focus-visible {
+			outline-color: var(--sun);
+			outline-offset: 6px;
+		}
+	}
+
+	// --- Pills ------------------------------------------------
+	&__pills {
 		display: flex;
 		flex-wrap: wrap;
 		gap: 12px;
-		padding-top: 36px;
 	}
 
-	// --- Details ----------------------------------------------
-	&__details {
-		display: flex;
-		flex-direction: column;
-		gap: 12px;
-	}
-
-	&__detail {
-		display: grid;
-		grid-template-columns: 48px minmax(0, 1fr);
-		grid-template-rows: auto auto;
+	&__pill {
+		display: inline-flex;
 		align-items: center;
-		column-gap: 16px;
-		padding: 16px 20px;
-		border: 1px solid var(--on-dark-rule);
-		border-radius: var(--radius-md);
-		background: var(--on-dark-fill);
+		gap: 10px;
+		height: 60px;
+		padding: 0 26px;
+		border: 1px solid var(--on-dark-border);
+		border-radius: var(--radius-full);
+		font-family: var(--font-ui);
+		font-size: 17px;
+		font-weight: 600;
+		color: var(--white);
 		transition:
-			border-color 0.25s var(--ease),
 			background-color 0.25s var(--ease),
-			transform 0.25s var(--ease);
+			border-color 0.25s var(--ease),
+			color 0.25s var(--ease);
 
-		&--link:hover {
-			border-color: var(--sun);
-			background: var(--on-dark-hover);
-			transform: translateY(-2px);
+		&:hover {
+			border-color: var(--white);
+			background: var(--white);
+			color: var(--ink);
 		}
 
-		&--link:focus-visible {
+		&:focus-visible {
+			outline-color: var(--sun);
+		}
+
+		&--ghost {
+			border-color: transparent;
+			color: var(--on-dark-muted);
+
+			&:hover {
+				border-color: var(--on-dark-border);
+				background: var(--on-dark-hover);
+				color: var(--white);
+			}
+		}
+	}
+
+	// --- Small facts ------------------------------------------
+	&__facts {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 24px 64px;
+		padding-top: 56px;
+
+		dt {
+			font-family: var(--font-ui);
+			font-size: 12px;
+			font-weight: 600;
+			letter-spacing: 0.12em;
+			text-transform: uppercase;
+			color: var(--on-dark-subtle);
+		}
+
+		dd {
+			padding-top: 6px;
+			font-family: var(--font-ui);
+			font-size: 16px;
+			font-weight: 500;
+			color: var(--white);
+			font-variant-numeric: tabular-nums;
+		}
+	}
+
+	&__link {
+		color: var(--sun);
+		text-decoration: underline;
+		text-underline-offset: 4px;
+
+		&:hover {
+			color: var(--white);
+		}
+
+		&:focus-visible {
 			outline-color: var(--sun);
 		}
 	}
+}
 
-	&__icon {
-		display: grid;
-		grid-row: span 2;
-		place-items: center;
-		width: 48px;
-		height: 48px;
-		border-radius: var(--radius-sm);
-		background: var(--on-dark-hover);
-		color: var(--sun);
+@keyframes contact-pulse {
+	0% {
+		opacity: 0.5;
+		transform: scale(0.6);
 	}
 
-	&__label {
-		font-family: var(--font-ui);
-		font-size: 12px;
-		font-weight: 600;
-		letter-spacing: 0.12em;
-		text-transform: uppercase;
-		color: var(--on-dark-subtle);
-	}
-
-	&__value {
-		font-family: var(--font-ui);
-		font-size: 16px;
-		font-weight: 600;
-		color: var(--white);
-		overflow-wrap: anywhere;
+	100% {
+		opacity: 0;
+		transform: scale(1.6);
 	}
 }
 
 @media only screen and (max-width: 1024px) {
-	.contact__con {
-		grid-template-columns: minmax(0, 1fr);
-		gap: 48px;
-		padding: 96px 0;
+	.contact {
+		&__con {
+			padding: 96px 0 72px;
+		}
+
+		&__rule {
+			margin: 88px 0 64px;
+		}
+
+		&__orb {
+			width: 144px;
+			height: 144px;
+			font-size: 15px;
+		}
 	}
 }
 
 @media only screen and (max-width: 600px) {
 	.contact {
 		&__con {
-			padding: 72px 0;
+			padding: 72px 0 56px;
 		}
 
-		&__actions .m-button {
-			flex: 1 1 auto;
+		&__rule {
+			margin: 72px 0 56px;
+		}
+
+		&__orb {
+			right: 0;
+			width: 120px;
+			height: 120px;
+			font-size: 14px;
+		}
+
+		&__pill {
+			width: 100%;
+			height: 54px;
+			justify-content: center;
+			font-size: 15px;
 		}
 	}
 }

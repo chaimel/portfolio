@@ -2,7 +2,7 @@ import assert from 'node:assert/strict'
 import { existsSync } from 'node:fs'
 import test from 'node:test'
 import { fileURLToPath } from 'node:url'
-import { aboutFacts, approachPoints, credentials, toolGroups } from '../app/data/features/home.ts'
+import { approachPoints, credentials, toolGroups } from '../app/data/features/home.ts'
 import { featuredProject, projects } from '../app/data/features/projects.ts'
 import { icons } from '../app/data/ui/icons.ts'
 
@@ -54,7 +54,6 @@ test('the featured project has its case study and live link', () => {
 test('every icon the content names exists in the sprite', () => {
 	const study = featuredProject.case_study
 	const names = [
-		...aboutFacts.map(fact => fact.icon),
 		...approachPoints.map(point => point.icon),
 		...credentials.map(credential => credential.icon),
 		...toolGroups.map(group => group.icon),

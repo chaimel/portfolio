@@ -49,14 +49,27 @@
 
 					<MHeading id="viewer-title" variant="2" size="3" class="viewer__title">{{ project.title }}</MHeading>
 					<MText size="small" color="--text-muted" class="viewer__meta">
-						{{ project.category }}<template v-if="project.built_at"> · Built at {{ project.built_at }}</template>
+						{{ project.category }}<template v-if="project.built_at"> · {{ project.scope ? 'Maintained' : 'Built' }} at {{ project.built_at }}</template>
 					</MText>
 					<MText v-if="project.summary" size="large" color="--text-secondary" class="viewer__summary">
 						{{ project.summary }}
 					</MText>
+					<MText v-if="project.scope?.note" size="small" color="--text-muted" class="viewer__note">
+						{{ project.scope.note }}
+					</MText>
 				</div>
 
 				<dl class="viewer__facts">
+					<div v-if="project.scope" class="viewer__fact">
+						<dt>My part</dt>
+						<dd>
+							<ul class="viewer__tags">
+								<li v-for="part in project.scope.parts" :key="part">
+									<MTag variant="soft" size="sm">{{ part }}</MTag>
+								</li>
+							</ul>
+						</dd>
+					</div>
 					<div class="viewer__fact">
 						<dt>Languages</dt>
 						<dd>
@@ -337,6 +350,10 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKeydown))
 
 	&__summary {
 		padding-top: 14px;
+	}
+
+	&__note {
+		padding-top: 10px;
 	}
 
 	&__facts {

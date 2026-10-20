@@ -15,6 +15,8 @@ interface Role {
 	title: string
 	org: string
 	summary: string
+	// the main languages and tools of the role
+	tags: string[]
 }
 
 interface ToolGroup {
@@ -22,13 +24,6 @@ interface ToolGroup {
 	title: string
 	text: string
 	tools: string[]
-}
-
-// A labeled fact with an icon: "Based in — Ginatilan, Cebu".
-interface ContentFact {
-	icon: MIconName
-	label: string
-	value: string
 }
 
 // Education, certificates, and seminars.
@@ -51,7 +46,6 @@ export type {
 	ContentPoint,
 	Role,
 	ToolGroup,
-	ContentFact,
 	Credential,
 	ContactDetails,
 }

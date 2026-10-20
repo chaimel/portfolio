@@ -5,8 +5,9 @@
 // (a CSS @import is ignored by browsers if any rule precedes it).
 // Family tokens (--font-base etc.) live in base/_preset.scss.
 //
-// Space Grotesk — headings, numbers and the logo
-// Inter         — reading copy and UI
+// Bricolage Grotesque — headings, numbers and the logo; its optical
+//                       size axis (opsz) tightens big type on its own
+// Geist               — reading copy and UI
 // =============================================================
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Geist:ital,wght@0,100..900;1,100..900&display=swap');

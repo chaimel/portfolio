@@ -115,7 +115,7 @@ const stats = [
 		padding-top: 22px;
 		font-size: clamp(42px, 5.4vw, 76px);
 		line-height: 1.04;
-		letter-spacing: -0.04em;
+		letter-spacing: -0.02em;
 	}
 
 	&__line {
@@ -178,7 +178,7 @@ const stats = [
 			font-size: 40px;
 			font-weight: 700;
 			line-height: 1;
-			letter-spacing: -0.04em;
+			letter-spacing: -0.02em;
 			color: var(--text-primary);
 		}
 	}
@@ -230,7 +230,7 @@ const stats = [
 
 		&__title {
 			font-size: clamp(34px, 9.4vw, 42px);
-			letter-spacing: -0.035em;
+			letter-spacing: -0.02em;
 		}
 
 		&__actions .m-button {
