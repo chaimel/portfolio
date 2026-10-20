@@ -2,7 +2,7 @@
 // wherever the data holds them all; the sites-shipped total is typed in
 // because it's far more than this portfolio lists. The story, education,
 // and seminars come from the résumé in public/.
-import type { ContentPoint, Credential, Role, ToolGroup } from '~/types/features/content'
+import type { ContentPoint, Credential, Role, StatementPart, ToolGroup } from '~/types/features/content'
 
 const hero = {
 	status: 'Available for web developer roles and freelance work',
@@ -21,7 +21,7 @@ const hero = {
 const work = {
 	title: `What I maintain now, and a few of the ${hero.sites_shipped} sites I’ve shipped.`,
 	lede: 'At Glophics I keep Musticker’s admin panel and account pages running. Before that I built more than a hundred custom WordPress sites — here are six, for childcare, retail, fishing, logistics, healthcare, and aerial photography clients — with the languages and tools behind each one.',
-	hint: 'Scroll on — each project stacks over the last. Hover a screenshot to scroll its site.',
+	hint: 'Hover a project to see it. Click to scroll through the whole page.',
 }
 
 const approachPoints: ContentPoint[] = [
@@ -30,7 +30,19 @@ const approachPoints: ContentPoint[] = [
 	{ icon: 'light-trending-up', title: 'Improve', text: 'Faster loads, better responsiveness, and cleaner code as the site grows.' },
 ]
 
+// About's big opening line; its words light up as it scrolls through
+const statement: StatementPart[] = [
+	{ text: 'I’m a web developer in Cebu who has shipped ' },
+	{ stat: hero.sites_shipped },
+	{ text: ' WordPress sites. Today I keep ' },
+	{ project: 'musticker' },
+	{ text: ' running at Glophics, and I built the booking front end for ' },
+	{ project: 'duelo-battleground' },
+	{ text: '. I care about pages that load fast, read clearly, and stay easy to maintain.' },
+]
+
 const about = {
+	statement,
 	title: 'Web developer focused on clear delivery and maintainable front ends.',
 	// my story, in order: where I'm from, where I started, where I am
 	story: [
@@ -86,7 +98,6 @@ const roles: Role[] = [
 
 const experience = {
 	title: 'Web development across Nuxt.js, Laravel, WordPress, and testing.',
-	companies_label: 'Where I’ve worked',
 	education_title: 'Education & training',
 }
 

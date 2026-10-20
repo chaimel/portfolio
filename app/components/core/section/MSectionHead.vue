@@ -1,7 +1,7 @@
 <template>
 	<div :class="['m-section-head', `m-section-head--${props.layout}`, { 'm-section-head--inverse': props.inverse }]">
 		<div class="m-section-head__main">
-			<MEyebrow v-if="props.eyebrow" :tone="props.inverse ? 'sun' : 'brand'">{{ props.eyebrow }}</MEyebrow>
+			<MEyebrow v-if="props.eyebrow" :tone="props.inverse ? 'sun' : 'brand'" :index="props.index">{{ props.eyebrow }}</MEyebrow>
 			<MHeading
 				:id="props.titleId"
 				:variant="props.level"
@@ -35,6 +35,8 @@ interface Props {
 	// the heading's id, for the section's aria-labelledby
 	titleId?: string
 	eyebrow?: string
+	// the section's number on the page, shown before the eyebrow
+	index?: string
 	lede?: string
 	level?: '1' | '2' | '3'
 	layout?: 'stack' | 'split'
@@ -45,6 +47,7 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
 	titleId: undefined,
 	eyebrow: undefined,
+	index: undefined,
 	lede: undefined,
 	level: '2',
 	layout: 'stack',

@@ -12,6 +12,17 @@ import type { Project, ProjectImage } from '~/types/features/project'
 
 const duelo_images = '/images/projects/duelo-battleground'
 
+// Two 400×250 crops of a full-page capture — the top of the page and a
+// stretch further down — for the hero wall (public/images/projects/wall).
+function wallShots(slug: string, title: string): ProjectImage[] {
+	return [1, 2].map(part => ({
+		src: `/images/projects/wall/${slug}-${part}.webp`,
+		width: 400,
+		height: 250,
+		alt: `${title}, ${part === 1 ? 'top of the page' : 'further down the page'}`,
+	}))
+}
+
 // a WordPress theme is PHP templates plus the front-end layer
 const wordpress_languages = ['PHP', 'HTML', 'CSS', 'JavaScript']
 
@@ -46,6 +57,10 @@ const duelo: Project = {
 	},
 	phone: duelo_phone_home,
 	summary: 'Online court booking for a badminton training facility in Cebu City. Players pick a date, choose hourly slots across five courts, pay online, and get a QR pass that starts live scoring at the net.',
+	wall: [
+		{ src: '/images/projects/wall/duelo-battleground-1.webp', width: 400, height: 250, alt: 'Duelo Battleground home page' },
+		{ src: '/images/projects/wall/duelo-battleground-2.webp', width: 400, height: 250, alt: 'Duelo Battleground booking page' },
+	],
 	role: 'Front-end developer',
 	features: [
 		'Date strip with a full-calendar fallback',
@@ -156,6 +171,7 @@ const moreWork: Project[] = [
 		stack: ['Nuxt', 'Vue 3', 'Pinia', 'Nuxt i18n', 'Laravel', 'AWS S3'],
 		live_url: 'https://www.musticker.com/kr/',
 		image: { src: '/images/projects/musticker.webp', width: 800, height: 1789, alt: 'Musticker storefront home page' },
+		wall: wallShots('musticker', 'Musticker'),
 	},
 	{
 		slug: 'beulahland-christian-academy',
@@ -170,6 +186,7 @@ const moreWork: Project[] = [
 		stack: ['WordPress', 'Custom theme', 'Master Slider', 'Font Awesome'],
 		live_url: 'https://www.beulahlandjax.org/',
 		image: { src: '/images/projects/beulahland-christian-academy.webp', width: 800, height: 2056, alt: 'Beulahland Christian Academy website' },
+		wall: wallShots('beulahland-christian-academy', 'Beulahland Christian Academy'),
 	},
 	{
 		slug: 'spark-city-smoke-and-vape',
@@ -183,6 +200,7 @@ const moreWork: Project[] = [
 		stack: ['WordPress', 'Custom theme', 'jQuery', 'Age Gate', 'Font Awesome'],
 		live_url: 'https://web.link2newsite.com/limelightll/sparkcityon575/',
 		image: { src: '/images/projects/spark-city-smoke-and-vape.webp', width: 800, height: 2283, alt: 'Spark City Smoke and Vape website' },
+		wall: wallShots('spark-city-smoke-and-vape', 'Spark City Smoke and Vape'),
 	},
 	{
 		slug: 'salmastar-fishing-group',
@@ -197,6 +215,7 @@ const moreWork: Project[] = [
 		stack: ['WordPress', 'Custom theme', 'jQuery', 'Font Awesome'],
 		live_url: 'https://w3204.proweaversite3.com/',
 		image: { src: '/images/projects/salmastar-fishing-group.webp', width: 800, height: 2049, alt: 'SalmaStar Fishing Group website' },
+		wall: wallShots('salmastar-fishing-group', 'SalmaStar Fishing Group'),
 	},
 	{
 		slug: 'smt-logistics',
@@ -211,6 +230,7 @@ const moreWork: Project[] = [
 		stack: ['WordPress', 'Custom theme', 'Font Awesome'],
 		live_url: 'https://www.smtlg.com/',
 		image: { src: '/images/projects/smt-logistics.webp', width: 800, height: 1804, alt: 'SMT Logistics website' },
+		wall: wallShots('smt-logistics', 'SMT Logistics'),
 	},
 	{
 		// the client's site now shows "temporarily unavailable" behind an expired certificate
@@ -225,6 +245,7 @@ const moreWork: Project[] = [
 		stack: ['WordPress'],
 		live_url: 'https://www.summerfieldhomecare.com/',
 		image: { src: '/images/projects/summerfield-home-care.webp', width: 800, height: 1958, alt: 'Summerfield Home Care website' },
+		wall: wallShots('summerfield-home-care', 'Summerfield Home Care'),
 	},
 	{
 		// the client's domain no longer resolves
@@ -239,6 +260,7 @@ const moreWork: Project[] = [
 		stack: ['WordPress'],
 		live_url: 'http://www.skyguidellc.com/',
 		image: { src: '/images/projects/skyguide-llc.webp', width: 800, height: 1762, alt: 'Skyguide LLC website' },
+		wall: wallShots('skyguide-llc', 'Skyguide LLC'),
 	},
 ]
 

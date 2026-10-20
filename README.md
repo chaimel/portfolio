@@ -11,7 +11,6 @@ The structure and conventions follow `bpo/frontend`.
 npm install
 npm run dev        # http://localhost:3000
 npm run generate   # static build into .output/public (what Netlify runs)
-npm test           # data checks: images exist, icons exist, every project lists its stack
 npm run typecheck  # vue-tsc over every .vue and .ts file
 ```
 
@@ -27,9 +26,9 @@ app/
   components/
     base/               M* primitives — auto-imported (MButton, MHeading, MText, MIcon, MTag, MBadge, MEyebrow, MBreadcrumbs, MModal)
     core/               composed UI shared across features: project/ (MBrowserShot, MPhoneShot), section/ (MSectionHead)
-    layout/             Header, Footer (links + full-width name wordmark), Logo, ScrollProgress, BackToTop
+    layout/             Header (opens up at the top, a floating pill once you scroll), Footer (links + full-width name wordmark), Logo, ScrollProgress, BackToTop
     features/<page>/    page sections; each Index.vue composes its sections
-      home/             banner/ (Index, Rotator, Showcase) · Featured · work/ (Index + Card = full-width stacking cards, Viewer = project preview) · Marquee (tool band) · About (bento grid; its stack tile is #skills) · Experience (timeline) · Contact
+      home/             banner/ (Index = giant name + stats bar, Rotator, Wall = moving wall of site crops) · Featured (spotlight + spec sheet) · work/ (Index = project index with a floating preview, Entry = one row, Viewer = full-page preview) · Marquee (tool band) · About (lit statement, story, #skills, how I work) · Experience (career ledger) · Contact (ticker headline + email)
       project/          the case study: Banner · Overview · Flow · Highlights · Screens · Cta
   composables/app/      useCanonical, useModal (open/close dialogs by name), useActiveSection (header scrollspy), useSectionScroll (in-page links), useLocalTime (live clock, set after mount)
   data/features/        site.ts (name, contact, time zone, nav) · home.ts (hero, story, roles, education, skills) · projects.ts
@@ -43,14 +42,13 @@ app/
 public/
   images/projects/      WebP screenshots (see Images)
   icons/sprite.svg      generated
-tests/                  node --test checks for the data
 ```
 
 ## Routes
 
 | Route | What |
 | --- | --- |
-| `/` | Hero, featured project, more work (full-width stacking cards + preview window), tool marquee, about + skills (bento), experience, contact |
+| `/` | Hero (name + wall of work), featured project, more work (project index + preview window), tool marquee, about + skills, experience, contact |
 | `/projects/[slug]` | Case study — only projects with a `case_study` get a page (today: `duelo-battleground`) |
 
 ## Editing content
@@ -73,9 +71,11 @@ Screenshots live in `public/images/projects/` as WebP:
 - Website cards use a **full-page** capture, 800px wide (the card scrolls it on hover).
 - The featured project also has a 1600×1000 desktop `cover`, a 600px-wide `phone` capture, and the
   case-study screens.
+- Every project has two 400×250 `wall` crops in `public/images/projects/wall/` — the top of the
+  page and a stretch further down — for the hero's moving wall (`<slug>-1.webp`, `<slug>-2.webp`).
 
 Record each image's real `width` and `height` in `projects.ts`: they reserve the layout box and
-set how long the hover scroll takes. `npm test` fails if a listed image is missing.
+set how long the hover scroll takes.
 
 ## Deployment & SEO
 

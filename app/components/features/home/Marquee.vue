@@ -26,18 +26,24 @@ const items = [
 <style lang="scss" scoped>
 .marquee {
 	overflow: hidden;
-	padding: 28px 0;
+	// the tilt lifts one end and drops the other by about 2.6% of the
+	// screen's half-width, so the room above and below grows with it
+	padding: max(28px, 2.4vw) 0;
 	background: var(--canvas);
 
-	// slightly tilted, wider than the screen so the tilt never shows an edge
+	// slightly tilted, and started a little off the left edge so the tilt
+	// never shows a corner. It pivots on the middle of the screen, not its
+	// own middle — the band is two tracks wide, so its own middle is far
+	// off to the right and the left end would sink out of view.
 	&__band {
 		display: flex;
 		width: max-content;
-		margin-left: -2%;
+		margin-left: -40px;
 		padding: 18px 0;
 		background: linear-gradient(90deg, var(--brand-strong), var(--brand) 50%, var(--brand-strong));
 		box-shadow: var(--shadow-pop);
 		transform: rotate(-1.5deg);
+		transform-origin: calc(50vw + 40px) 50%;
 
 		&:hover .marquee__track {
 			animation-play-state: paused;
@@ -76,7 +82,7 @@ const items = [
 
 @media only screen and (max-width: 600px) {
 	.marquee {
-		padding: 20px 0;
+		padding: 22px 0;
 
 		&__band {
 			padding: 14px 0;

@@ -19,6 +19,15 @@ interface Role {
 	tags: string[]
 }
 
+// One piece of the About statement: plain words, a highlighted number,
+// or a project (by slug) shown as a chip with its screenshot. Spaces at
+// the edges of a text piece decide whether it sits apart from its
+// neighbours.
+type StatementPart =
+	| { text: string }
+	| { stat: string }
+	| { project: string }
+
 interface ToolGroup {
 	icon: MIconName
 	title: string
@@ -45,6 +54,7 @@ interface ContactDetails {
 export type {
 	ContentPoint,
 	Role,
+	StatementPart,
 	ToolGroup,
 	Credential,
 	ContactDetails,

@@ -4,6 +4,7 @@
 			<div class="work__con">
 				<MSectionHead
 					eyebrow="More work"
+					index="02"
 					:title="work.title"
 					title-id="work-title"
 					:lede="work.lede"
@@ -21,20 +22,38 @@
 					<MIcon name="light-expand" size="xs" />
 					{{ work.hint }}
 				</MText>
+
+				<ol class="work__index" @pointermove="movePreview" @pointerleave="leaveIndex">
+					<Entry
+						v-for="(project, position) in moreWork"
+						:key="project.slug"
+						:project="project"
+						:index="position"
+						:active="hovered === position"
+						@enter="hovered = position"
+						@preview="openViewer(position)"
+					/>
+				</ol>
 			</div>
 		</div>
 
-		<!-- full width: each card sticks under the header and the next one
-			 stacks over it (cards must be direct children for sticky to work) -->
-		<div ref="stack" class="work__stack">
-			<Card
+		<!-- the hovered project's site, trailing the pointer; each new one
+			 opens over the last -->
+		<div ref="float" :class="['work__float', { 'work__float--on': hovered >= 0 }]" aria-hidden="true">
+			<div
 				v-for="(project, position) in moreWork"
 				:key="project.slug"
-				:project="project"
-				:index="position"
-				:total="moreWork.length"
-				@preview="openViewer(position)"
-			/>
+				:class="['work__shot', { 'work__shot--on': hovered === position }]"
+			>
+				<img
+					:src="project.image.src"
+					:width="project.image.width"
+					:height="project.image.height"
+					alt=""
+					loading="lazy"
+					decoding="async"
+				>
+			</div>
 		</div>
 
 		<Viewer v-model:index="viewer_index" :projects="moreWork" name="project-viewer" />
@@ -42,20 +61,20 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
+import { onBeforeUnmount, ref } from 'vue'
 import MSectionHead from '~/components/core/section/MSectionHead.vue'
 import { hero, work } from '~/data/features/home'
 import { moreWork } from '~/data/features/projects'
-import Card from './Card.vue'
+import Entry from './Entry.vue'
 import Viewer from './Viewer.vue'
 
 const { openModal } = useModal()
 
-const counts = computed(() => [
+const counts = [
 	{ value: hero.sites_shipped, label: 'WordPress sites shipped' },
 	{ value: String(moreWork.length), label: 'Shown here' },
 	{ value: String(moreWork.filter(site => site.status === 'live').length), label: 'Still live' },
-])
+]
 
 const viewer_index = ref(0)
 
@@ -64,52 +83,55 @@ function openViewer(position: number) {
 	openModal('project-viewer')
 }
 
-// --- The stack ----------------------------------------------------
-// While the cards stick (wide, tall-enough screens — the same media
-// query as Card.vue), each card learns how much of it the next one
-// covers, 0 → 1, as --covered; the card shrinks and darkens with it.
-const stack = ref<HTMLElement | null>(null)
-let stack_query: MediaQueryList | null = null
+// --- The floating preview -------------------------------------------
+// Mouse only: it eases toward the pointer each frame and leans into the
+// direction it's moving. Phones get a screenshot in each row instead.
+const hovered = ref(-1)
+const float = ref<HTMLElement | null>(null)
+
+let target = { x: 0, y: 0 }
+let current = { x: 0, y: 0 }
+let placed = false
 let frame = 0
 
-function measure() {
+// it rides above the pointer so the hovered name stays readable, and
+// drops below it near the top of the screen
+function paint(tilt: number) {
+	float.value?.style.setProperty('--float-x', `${current.x.toFixed(1)}px`)
+	float.value?.style.setProperty('--float-y', `${current.y.toFixed(1)}px`)
+	float.value?.style.setProperty('--float-tilt', `${tilt.toFixed(2)}deg`)
+	float.value?.style.setProperty('--float-dy', current.y < 340 ? '36px' : 'calc(-100% - 36px)')
+}
+
+function follow() {
 	frame = 0
-	const cards = [...(stack.value?.children ?? [])] as HTMLElement[]
-	const active = stack_query?.matches ?? false
-
-	cards.forEach((card, position) => {
-		const next = cards[position + 1]
-		let covered = 0
-
-		// layout height, not the on-screen box: the shrink scales from the
-		// top, so it would otherwise feed back into the measurement
-		if (active && next) {
-			const bottom = card.getBoundingClientRect().top + card.offsetHeight
-			covered = Math.min(Math.max((bottom - next.getBoundingClientRect().top) / card.offsetHeight, 0), 1)
-		}
-
-		card.style.setProperty('--covered', covered.toFixed(3))
-	})
+	const dx = target.x - current.x
+	const dy = target.y - current.y
+	current = { x: current.x + dx * 0.16, y: current.y + dy * 0.16 }
+	paint(Math.max(-8, Math.min(8, dx * 0.05)))
+	if (Math.abs(dx) > 0.5 || Math.abs(dy) > 0.5) frame = requestAnimationFrame(follow)
 }
 
-function schedule() {
-	if (!frame) frame = requestAnimationFrame(measure)
+function movePreview(event: PointerEvent) {
+	if (event.pointerType !== 'mouse') return
+	target = { x: event.clientX, y: event.clientY }
+
+	// appear where the pointer is, not slide in from the last spot
+	if (!placed || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+		current = { ...target }
+		placed = true
+		paint(0)
+		return
+	}
+	if (!frame) frame = requestAnimationFrame(follow)
 }
 
-onMounted(() => {
-	if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-
-	stack_query = window.matchMedia('(min-width: 960px) and (min-height: 640px)')
-	stack_query.addEventListener('change', schedule)
-	window.addEventListener('scroll', schedule, { passive: true })
-	window.addEventListener('resize', schedule, { passive: true })
-	measure()
-})
+function leaveIndex() {
+	hovered.value = -1
+	placed = false
+}
 
 onBeforeUnmount(() => {
-	stack_query?.removeEventListener('change', schedule)
-	window.removeEventListener('scroll', schedule)
-	window.removeEventListener('resize', schedule)
 	if (frame) cancelAnimationFrame(frame)
 })
 </script>
@@ -119,7 +141,7 @@ onBeforeUnmount(() => {
 	background: var(--canvas);
 
 	&__con {
-		padding: 120px 0 0;
+		padding: 120px 0;
 	}
 
 	&__counts {
@@ -158,38 +180,83 @@ onBeforeUnmount(() => {
 		font-family: var(--font-ui);
 	}
 
-	// nearly edge to edge, capped so ultra-wide screens stay sane
-	&__stack {
-		display: flex;
-		flex-direction: column;
-		gap: 48px;
-		max-width: 1760px;
-		margin: 0 auto;
-		padding: 40px clamp(12px, 2vw, 32px) 120px;
+	&__index {
+		margin-top: 40px;
+	}
+
+	// --- Floating preview ---------------------------------------------
+	&__float {
+		position: fixed;
+		top: 0;
+		left: 0;
+		z-index: 30;
+		width: 400px;
+		aspect-ratio: 16 / 10;
+		pointer-events: none;
+		opacity: 0;
+		transform:
+			translate3d(var(--float-x, 0), var(--float-y, 0), 0)
+			translate(-50%, var(--float-dy, 36px))
+			rotate(var(--float-tilt, 0deg))
+			scale(0.85);
+		// transform isn't transitioned: the script already eases it
+		transition: opacity 0.25s var(--ease);
+
+		&--on {
+			opacity: 1;
+			transform:
+				translate3d(var(--float-x, 0), var(--float-y, 0), 0)
+				translate(-50%, var(--float-dy, 36px))
+				rotate(var(--float-tilt, 0deg));
+		}
+	}
+
+	&__shot {
+		position: absolute;
+		inset: 0;
+		overflow: hidden;
+		border: 5px solid var(--white);
+		border-radius: var(--radius-lg);
+		background: var(--white);
+		box-shadow: var(--shadow-float);
+		clip-path: inset(100% 0 0 0 round var(--radius-lg));
+		transition: clip-path 0.5s var(--ease);
+
+		&--on {
+			z-index: 1;
+			clip-path: inset(0 0 0 0 round var(--radius-lg));
+		}
+
+		img {
+			display: block;
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+			object-position: top;
+		}
+	}
+}
+
+@media (hover: none), (pointer: coarse) {
+	.work__float {
+		display: none;
 	}
 }
 
 @media only screen and (max-width: 1024px) {
-	.work {
-		&__con {
-			padding: 88px 0 0;
-		}
-
-		&__stack {
-			gap: 24px;
-			padding-bottom: 88px;
-		}
+	.work__con {
+		padding: 88px 0;
 	}
 }
 
-@media only screen and (max-width: 860px) {
+@media only screen and (max-width: 760px) {
 	.work {
 		&__con {
-			padding: 64px 0 0;
+			padding: 64px 0;
 		}
 
-		&__stack {
-			padding-bottom: 64px;
+		&__float {
+			display: none;
 		}
 	}
 }

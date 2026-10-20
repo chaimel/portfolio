@@ -157,28 +157,48 @@ onBeforeUnmount(() => {
 </script>
 
 <style lang="scss" scoped>
+// Open across the top of the page; once you scroll, the bar draws in
+// to a floating glass pill.
 .header {
 	position: sticky;
 	top: 0;
 	z-index: 50;
-	border-bottom: 1px solid transparent;
-	background: var(--header-glass);
-	backdrop-filter: saturate(1.4) blur(16px);
-	-webkit-backdrop-filter: saturate(1.4) blur(16px);
-	transition:
-		border-color 0.25s var(--ease),
-		box-shadow 0.25s var(--ease);
+	display: flex;
+	align-items: center;
+	height: var(--header-height);
+	pointer-events: none;
 
-	&--scrolled {
-		border-bottom-color: var(--border);
-		box-shadow: var(--shadow-header);
+	> .wrapper,
+	> .skip-link {
+		pointer-events: auto;
 	}
 
 	&__con {
 		display: flex;
 		align-items: center;
 		gap: 24px;
-		height: var(--header-height);
+		max-width: 100%;
+		height: 56px;
+		margin: 0 auto;
+		padding: 0 4px;
+		border: 1px solid transparent;
+		border-radius: var(--radius-full);
+		transition:
+			max-width 0.45s var(--ease),
+			padding 0.45s var(--ease),
+			background-color 0.3s var(--ease),
+			border-color 0.3s var(--ease),
+			box-shadow 0.3s var(--ease);
+	}
+
+	&--scrolled &__con {
+		max-width: 1040px;
+		padding: 0 8px 0 10px;
+		border-color: var(--border);
+		background: var(--header-glass);
+		box-shadow: var(--shadow-float);
+		backdrop-filter: saturate(1.4) blur(16px);
+		-webkit-backdrop-filter: saturate(1.4) blur(16px);
 	}
 
 	// --- Nav --------------------------------------------------
@@ -241,6 +261,7 @@ onBeforeUnmount(() => {
 		left: 0;
 		right: 0;
 		z-index: 2;
+		pointer-events: auto;
 		max-height: calc(100dvh - var(--header-height));
 		overflow-y: auto;
 		border-bottom: var(--rule);
@@ -286,14 +307,14 @@ onBeforeUnmount(() => {
 		padding: 24px 0 28px;
 	}
 
-	// absolute, not fixed: the header's backdrop-filter makes it the
-	// containing block for fixed children
+	// hangs off the sticky header, under the open panel
 	&__backdrop {
 		position: absolute;
 		top: 100%;
 		left: 0;
 		right: 0;
 		z-index: 1;
+		pointer-events: auto;
 		height: calc(100dvh - var(--header-height));
 		background: var(--overlay);
 	}
@@ -337,7 +358,8 @@ onBeforeUnmount(() => {
 	}
 }
 
-@media only screen and (max-width: 380px) {
+// phones: logo + menu only (the menu panel has its own Email me)
+@media only screen and (max-width: 480px) {
 	.header__cta {
 		display: none;
 	}

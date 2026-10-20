@@ -90,6 +90,8 @@ interface Project {
 	// one desktop screen (16:10) and one phone screen, for showcases
 	cover?: ProjectImage
 	phone?: ProjectImage
+	// small 16:10 crops of the site for the home hero's moving wall
+	wall?: ProjectImage[]
 	summary?: string
 	role?: string
 	scope?: ProjectScope

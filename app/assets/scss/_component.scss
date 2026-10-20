@@ -50,6 +50,14 @@
 	text-transform: uppercase;
 	color: var(--brand-strong);
 
+	&__index {
+		font-family: var(--font-display);
+		font-size: 15px;
+		font-weight: 700;
+		letter-spacing: 0;
+		font-variant-numeric: tabular-nums;
+	}
+
 	&__mark {
 		flex: 0 0 auto;
 		width: 22px;

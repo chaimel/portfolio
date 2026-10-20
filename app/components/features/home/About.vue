@@ -1,113 +1,92 @@
 <template>
 	<section id="about" class="about" aria-labelledby="about-title">
-		<div class="about__backdrop" aria-hidden="true" />
-
 		<div class="wrapper">
-			<!-- one bento grid: story, numbers, now, place, stack, habits, history -->
 			<div class="about__con">
-				<div class="tile tile--intro">
-					<MEyebrow>About me</MEyebrow>
-					<MHeading id="about-title" variant="2" size="3" class="tile__heading">{{ about.title }}</MHeading>
-					<MText
-						v-for="paragraph in about.story.slice(0, 2)"
-						:key="paragraph"
-						color="--text-secondary"
-						class="tile__paragraph"
-					>
-						{{ paragraph }}
-					</MText>
-					<p class="tile__goal">
-						<MIcon name="light-flag" size="sm" />
-						<span><strong>Goal:</strong> {{ about.goal }}</span>
-					</p>
-				</div>
+				<MEyebrow index="03" aria-hidden="true">About me</MEyebrow>
+				<h2 id="about-title" class="sr-only">About me</h2>
 
-				<div class="tile tile--sites">
-					<span class="tile__rings" aria-hidden="true" />
-					<span class="tile__big">{{ hero.sites_shipped }}</span>
-					<span class="tile__label">WordPress sites shipped</span>
-				</div>
+				<!-- each word lights up as the paragraph scrolls through the view -->
+				<p ref="statement" class="about__statement" :style="{ '--total': tokens.length }">
+					<template v-for="(token, index) in tokens" :key="index">
+						<span
+							v-if="token.kind === 'project'"
+							class="about__chip"
+							:style="{ '--i': index, '--project-accent': token.accent }"
+						>
+							<img
+								v-if="token.image"
+								:src="token.image.src"
+								:width="token.image.width"
+								:height="token.image.height"
+								alt=""
+								loading="lazy"
+								decoding="async"
+							>
+							{{ token.text }}
+						</span>
+						<span v-else :class="token.kind === 'stat' ? 'about__stat' : 'about__word'" :style="{ '--i': index }">{{ token.text }}</span>{{ token.space ? ' ' : '' }}
+					</template>
+				</p>
 
-				<div class="tile tile--now">
-					<span class="tile__kicker">
-						<span class="tile__pulse" aria-hidden="true" />
-						Now
-					</span>
-					<MHeading variant="3" size="5" class="tile__role">{{ current_role?.title }}</MHeading>
-					<MText size="small" color="--text-secondary">at {{ current_role?.org }}</MText>
-					<ul class="tile__chips" aria-label="Current stack">
-						<li v-for="tag in current_role?.tags" :key="tag">{{ tag }}</li>
-					</ul>
-				</div>
-
-				<div class="tile tile--place">
-					<span class="tile__dots" aria-hidden="true" />
-					<span class="tile__kicker tile__kicker--light">
-						<MIcon name="light-map-pin" size="sm" />
-						{{ contact.location }}
-					</span>
-					<span class="tile__clock">
-						<span class="tile__time">{{ time || '—' }}</span>
-						<span class="tile__zone">in {{ localTime.place }}</span>
-					</span>
-					<MBadge tone="inverse" size="sm" dot>{{ hero.status }}</MBadge>
-				</div>
-
-				<div id="skills" class="tile tile--stack">
-					<div class="tile__stack-head">
-						<MHeading variant="3" size="4">Stack &amp; skills</MHeading>
-						<MText size="small" color="--text-muted">{{ toolkit.title }}</MText>
+				<!-- the story in magazine columns, beside the facts -->
+				<div class="about__body">
+					<div class="about__story">
+						<MHeading variant="3" size="4" class="about__story-title">{{ about.title }}</MHeading>
+						<div class="about__columns">
+							<MText v-for="paragraph in about.story" :key="paragraph" color="--text-secondary" class="about__paragraph">
+								{{ paragraph }}
+							</MText>
+						</div>
 					</div>
-					<div class="tile__groups">
-						<div v-for="group in toolGroups" :key="group.title" class="tile__group">
-							<span class="tile__group-title">
-								<MIcon :name="group.icon" size="sm" />
-								{{ group.title }}
-							</span>
-							<ul class="tile__chips" :aria-label="`${group.title} tools`">
+
+					<div class="about__facts">
+						<dl>
+							<div v-for="fact in facts" :key="fact.label" class="about__fact">
+								<dt>{{ fact.label }}</dt>
+								<dd>
+									{{ fact.value }}
+									<span v-if="fact.note">{{ fact.note }}</span>
+								</dd>
+							</div>
+						</dl>
+						<p class="about__goal">
+							<MIcon name="light-flag" size="sm" />
+							<span><strong>Goal:</strong> {{ about.goal }}</span>
+						</p>
+					</div>
+				</div>
+
+				<div id="skills" class="about__skills">
+					<div class="about__skills-head">
+						<MHeading variant="3" size="3">Stack &amp; skills</MHeading>
+						<MText color="--text-secondary">{{ toolkit.title }}</MText>
+					</div>
+
+					<div class="about__groups">
+						<div v-for="group in toolGroups" :key="group.title" class="about__group">
+							<span class="about__group-icon" aria-hidden="true"><MIcon :name="group.icon" size="md" /></span>
+							<MHeading variant="4" size="5">{{ group.title }}</MHeading>
+							<MText size="small" color="--text-secondary">{{ group.text }}</MText>
+							<ul class="about__chips" :aria-label="`${group.title} tools`">
 								<li v-for="tool in group.tools" :key="tool">{{ tool }}</li>
 							</ul>
 						</div>
 					</div>
 				</div>
 
-				<div class="tile tile--work">
-					<MHeading variant="3" size="4">{{ about.approach.title }}</MHeading>
-					<ol class="tile__steps">
-						<li v-for="(point, index) in approachPoints" :key="point.title">
-							<span class="tile__step-number" aria-hidden="true">{{ String(index + 1).padStart(2, '0') }}</span>
-							<div>
-								<span class="tile__step-title">{{ point.title }}</span>
-								<MText size="small" color="--text-secondary">{{ point.text }}</MText>
-							</div>
+				<div class="about__how">
+					<MHeading variant="3" size="3">{{ about.approach.title }}</MHeading>
+					<ol class="about__steps">
+						<li v-for="(point, index) in approachPoints" :key="point.title" class="about__step">
+							<span class="about__step-number" aria-hidden="true">{{ String(index + 1).padStart(2, '0') }}</span>
+							<MHeading variant="4" size="5">{{ point.title }}</MHeading>
+							<MText size="small" color="--text-secondary">{{ point.text }}</MText>
 						</li>
 					</ol>
-				</div>
-
-				<div class="tile tile--ai">
-					<span class="tile__icon" aria-hidden="true"><MIcon name="light-sparkles" size="md" /></span>
-					<span class="tile__fact-label">How I use AI</span>
-					<span class="tile__fact-value">{{ about.ai.title }}</span>
-					<MText size="small" color="--text-secondary">{{ about.ai.text }}</MText>
-				</div>
-
-				<div class="tile tile--fact">
-					<span class="tile__icon" aria-hidden="true"><MIcon name="light-graduation-cap" size="md" /></span>
-					<span class="tile__fact-label">Studied</span>
-					<span class="tile__fact-value">{{ degree?.title }}</span>
-					<MText size="small" color="--text-muted">{{ degree?.place }} · {{ degree?.years }}</MText>
-				</div>
-
-				<div class="tile tile--fact tile--start">
-					<span class="tile__icon" aria-hidden="true"><MIcon name="light-flag" size="md" /></span>
-					<span class="tile__fact-label">Started · {{ first_role?.start }}</span>
-					<span class="tile__fact-value">{{ first_role?.title }}</span>
-					<MText size="small" color="--text-muted">{{ first_role?.org }}</MText>
-				</div>
-
-				<div class="tile tile--years">
-					<span class="tile__big">{{ hero.years }}</span>
-					<span class="tile__label">Years building for the web</span>
+					<p class="about__ai">
+						<span class="about__ai-icon" aria-hidden="true"><MIcon name="light-sparkles" size="sm" /></span>
+						<span><strong>{{ about.ai.title }}.</strong> {{ about.ai.text }}</span>
+					</p>
 				</div>
 			</div>
 		</div>
@@ -115,307 +94,275 @@
 </template>
 
 <script setup lang="ts">
-import { about, approachPoints, credentials, hero, roles, toolGroups, toolkit } from '~/data/features/home'
-import { contact, localTime } from '~/data/features/site'
+import { onBeforeUnmount, onMounted, ref } from 'vue'
+import { about, approachPoints, credentials, roles, toolGroups, toolkit } from '~/data/features/home'
+import { projects } from '~/data/features/projects'
+import { contact } from '~/data/features/site'
+import type { ProjectImage } from '~/types/features/project'
 
+// --- The statement, word by word --------------------------------------
+interface Token {
+	kind: 'word' | 'stat' | 'project'
+	text: string
+	// a space after it, before the next token
+	space: boolean
+	image?: ProjectImage
+	accent?: string
+}
+
+const tokens: Token[] = []
+
+for (const part of about.statement) {
+	if ('stat' in part) {
+		tokens.push({ kind: 'stat', text: part.stat, space: true })
+	}
+	else if ('project' in part) {
+		const project = projects.find(item => item.slug === part.project)
+		tokens.push({
+			kind: 'project',
+			text: project?.title ?? part.project,
+			space: true,
+			image: project?.wall?.[0],
+			accent: project?.accent,
+		})
+	}
+	else {
+		// text that doesn't start with a space ("." after a chip) hugs what's before it
+		const previous = tokens.at(-1)
+		if (previous && !/^\s/.test(part.text)) previous.space = false
+		const words = part.text.trim().split(/\s+/)
+		words.forEach((word, index) => {
+			const last = index === words.length - 1
+			tokens.push({ kind: 'word', text: word, space: !last || /\s$/.test(part.text) })
+		})
+	}
+}
+
+// 0 → 1 from when the paragraph's top passes 80% down the view to when
+// its bottom passes 55% — fully lit before it leaves
+const statement = ref<HTMLElement | null>(null)
+let frame = 0
+
+function light() {
+	frame = 0
+	const box = statement.value?.getBoundingClientRect()
+	if (!box) return
+	const view = window.innerHeight
+	const progress = Math.min(Math.max((view * 0.8 - box.top) / (view * 0.25 + box.height), 0), 1)
+	statement.value?.style.setProperty('--lit', progress.toFixed(3))
+}
+
+function schedule() {
+	if (!frame) frame = requestAnimationFrame(light)
+}
+
+onMounted(() => {
+	if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+	window.addEventListener('scroll', schedule, { passive: true })
+	window.addEventListener('resize', schedule, { passive: true })
+	light()
+})
+
+onBeforeUnmount(() => {
+	window.removeEventListener('scroll', schedule)
+	window.removeEventListener('resize', schedule)
+	if (frame) cancelAnimationFrame(frame)
+})
+
+// --- Facts ----------------------------------------------------------------
 const current_role = roles.find(role => !role.end)
 const first_role = roles.at(-1)
 const degree = credentials[0]
 
-const time = useLocalTime(localTime.timezone)
+const facts = [
+	{ label: 'Based in', value: contact.location, note: '' },
+	{ label: 'Now', value: current_role?.title ?? '', note: `at ${current_role?.org} · since ${current_role?.start}` },
+	{ label: 'Studied', value: degree?.title ?? '', note: `${degree?.place} · ${degree?.years}` },
+	{ label: 'First role', value: first_role?.title ?? '', note: `${first_role?.org} · ${first_role?.start}` },
+]
 </script>
 
 <style lang="scss" scoped>
 .about {
 	position: relative;
-	overflow: hidden;
-	isolation: isolate;
 	background: var(--canvas);
 
-	// soft brand light and a fading dot grid, like the hero
-	&__backdrop {
-		position: absolute;
-		inset: 0;
-		z-index: -1;
-		pointer-events: none;
-		background:
-			radial-gradient(46rem 32rem at 0% 0%, var(--brand-soft), transparent 70%),
-			radial-gradient(38rem 28rem at 100% 100%, var(--sun-soft), transparent 70%);
+	&__con {
+		padding: 128px 0 120px;
+	}
 
-		&::after {
-			content: '';
-			position: absolute;
-			inset: 0;
-			background-image: radial-gradient(var(--border-strong) 1px, transparent 1.4px);
-			background-size: 26px 26px;
-			opacity: 0.5;
-			mask-image: linear-gradient(to bottom, black 0%, transparent 40%);
+	// --- Statement ------------------------------------------------------
+	&__statement {
+		// fully lit until the script takes over (and for reduced motion)
+		--lit: 1;
+
+		max-width: 1160px;
+		padding-top: 28px;
+		font-family: var(--font-display);
+		font-size: clamp(30px, 4.3vw, 60px);
+		font-weight: 600;
+		line-height: 1.2;
+		letter-spacing: -0.02em;
+		color: var(--text-primary);
+	}
+
+	&__word,
+	&__stat,
+	&__chip {
+		opacity: clamp(0.14, calc(var(--lit) * (var(--total) + 4) - var(--i)), 1);
+		transition: opacity 0.2s linear;
+	}
+
+	&__stat {
+		background: var(--gradient-brand);
+		-webkit-background-clip: text;
+		background-clip: text;
+		color: transparent;
+	}
+
+	// a project, inline: its screenshot in a pill, then its name
+	&__chip {
+		--project-accent: var(--brand);
+
+		display: inline-flex;
+		align-items: center;
+		gap: 0.3em;
+		margin: 0.04em 0;
+		padding: 0.1em 0.5em 0.1em 0.12em;
+		border: 1px solid color-mix(in srgb, var(--project-accent) 40%, var(--border));
+		border-radius: var(--radius-full);
+		background: color-mix(in srgb, var(--project-accent) 12%, var(--white));
+		font-size: 0.62em;
+		line-height: 1.2;
+		vertical-align: 0.18em;
+		white-space: nowrap;
+
+		img {
+			width: 2.6em;
+			height: 1.6em;
+			border-radius: var(--radius-full);
+			object-fit: cover;
+			object-position: top;
 		}
 	}
 
-	// --- The bento --------------------------------------------
-	&__con {
+	// --- Story + facts --------------------------------------------------
+	&__body {
 		display: grid;
-		grid-template-columns: repeat(4, minmax(0, 1fr));
-		grid-template-areas:
-			'intro intro sites now'
-			'intro intro place place'
-			'stack stack stack stack'
-			'work  work  work  years'
-			'edu   start ai    ai';
-		gap: 16px;
-		padding: 120px 0;
-	}
-}
-
-.tile {
-	position: relative;
-	display: flex;
-	flex-direction: column;
-	overflow: hidden;
-	padding: 28px;
-	border: 1px solid var(--border);
-	border-radius: var(--radius-xl);
-	background: var(--white);
-	box-shadow: var(--shadow-card);
-	transition:
-		box-shadow 0.3s var(--ease),
-		transform 0.3s var(--ease);
-
-	&:hover {
-		box-shadow: var(--shadow-pop);
-		transform: translateY(-3px);
+		grid-template-columns: minmax(0, 7fr) minmax(0, 4fr);
+		align-items: start;
+		gap: 48px 64px;
+		padding-top: 96px;
 	}
 
-	// --- Story ------------------------------------------------
-	&--intro {
-		grid-area: intro;
-		padding: 36px;
-		background:
-			radial-gradient(30rem 18rem at 100% 0%, var(--brand-tint), transparent 70%),
-			var(--white);
+	&__story-title {
+		max-width: 520px;
+		padding-bottom: 20px;
 	}
 
-	&__heading {
-		padding: 14px 0 6px;
+	&__columns {
+		column-count: 2;
+		column-gap: 40px;
+		padding-top: 20px;
+		border-top: var(--rule);
 	}
 
 	&__paragraph {
-		padding-top: 12px;
+		break-inside: avoid;
+		padding-bottom: 16px;
+	}
+
+	&__facts {
+		padding: 8px 28px 28px;
+		border: 1px solid var(--border);
+		border-radius: var(--radius-xl);
+		background: var(--white);
+		box-shadow: var(--shadow-card);
+	}
+
+	&__fact {
+		padding: 18px 0;
+		border-bottom: var(--rule);
+
+		dt {
+			font-family: var(--font-ui);
+			font-size: 12px;
+			font-weight: 600;
+			letter-spacing: 0.12em;
+			text-transform: uppercase;
+			color: var(--text-muted);
+		}
+
+		dd {
+			padding-top: 6px;
+			font-family: var(--font-display);
+			font-size: 19px;
+			font-weight: 600;
+			line-height: 26px;
+			color: var(--text-primary);
+
+			span {
+				display: block;
+				font-family: var(--font-ui);
+				font-size: 14px;
+				font-weight: 400;
+				line-height: 22px;
+				color: var(--text-secondary);
+			}
+		}
 	}
 
 	&__goal {
 		display: flex;
 		align-items: flex-start;
 		gap: 10px;
-		margin-top: auto;
-		padding: 16px 18px;
+		margin-top: 20px;
+		padding: 14px 16px;
 		border-radius: var(--radius-md);
 		background: var(--brand-tint);
 		font-size: 15px;
-		line-height: 24px;
+		line-height: 23px;
 		color: var(--brand-deep);
 
 		.m-icon {
+			flex-shrink: 0;
 			margin-top: 4px;
 			color: var(--brand);
 		}
 	}
 
-	&--intro &__goal {
-		margin-top: 24px;
+	// --- Stack & skills --------------------------------------------------
+	&__skills {
+		padding-top: 112px;
+		scroll-margin-top: calc(var(--header-height) + 24px);
 	}
 
-	// --- Numbers ----------------------------------------------
-	&__big {
-		font-family: var(--font-display);
-		font-size: 72px;
-		font-weight: 700;
-		line-height: 1;
-		letter-spacing: -0.03em;
-	}
-
-	&__label {
-		padding-top: 10px;
-		font-family: var(--font-ui);
-		font-size: 14px;
-		font-weight: 600;
-	}
-
-	&--sites {
-		grid-area: sites;
-		justify-content: flex-end;
-		border-color: transparent;
-		background: linear-gradient(150deg, var(--brand) 0%, var(--brand-strong) 70%, var(--brand-deep) 100%);
-		color: var(--white);
-	}
-
-	// concentric rings drifting off the corner
-	&__rings {
-		position: absolute;
-		top: -60px;
-		right: -60px;
-		width: 180px;
-		height: 180px;
-		border: 1px solid var(--on-dark-border);
-		border-radius: 50%;
-		box-shadow:
-			0 0 0 24px var(--on-dark-fill),
-			0 0 0 25px var(--on-dark-rule),
-			0 0 0 50px var(--on-dark-fill),
-			0 0 0 51px var(--on-dark-rule);
-	}
-
-	&--years {
-		grid-area: years;
-		justify-content: flex-end;
-		border-color: transparent;
-		background: linear-gradient(150deg, var(--accent-soft) 0%, var(--sun-soft) 100%);
-
-		.tile__big {
-			color: var(--accent-strong);
-		}
-
-		.tile__label {
-			color: var(--text-secondary);
-		}
-	}
-
-	// --- Now --------------------------------------------------
-	&--now {
-		grid-area: now;
-	}
-
-	&__kicker {
-		display: inline-flex;
-		align-items: center;
-		gap: 8px;
-		font-family: var(--font-ui);
-		font-size: 12px;
-		font-weight: 600;
-		letter-spacing: 0.12em;
-		text-transform: uppercase;
-		color: var(--text-muted);
-
-		&--light {
-			color: var(--on-dark-muted);
-			letter-spacing: 0.04em;
-			text-transform: none;
-			font-size: 14px;
-		}
-	}
-
-	&__pulse {
-		position: relative;
-		width: 8px;
-		height: 8px;
-		border-radius: 50%;
-		background: var(--live);
-
-		&::after {
-			content: '';
-			position: absolute;
-			inset: -5px;
-			border-radius: 50%;
-			background: var(--live);
-			opacity: 0.4;
-			animation: tile-pulse 1.8s ease-out infinite;
-		}
-	}
-
-	&__role {
-		padding-top: 16px;
-	}
-
-	&__chips {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 6px;
-		margin-top: auto;
-		padding-top: 16px;
-
-		li {
-			padding: 5px 11px;
-			border: 1px solid var(--border);
-			border-radius: var(--radius-full);
-			background: var(--canvas);
-			font-family: var(--font-ui);
-			font-size: 12px;
-			font-weight: 500;
-			color: var(--text-primary);
-		}
-	}
-
-	// --- Place + live clock -----------------------------------
-	&--place {
-		grid-area: place;
-		justify-content: space-between;
-		gap: 16px;
-		border-color: transparent;
-		background:
-			radial-gradient(26rem 16rem at 100% 100%, color-mix(in srgb, var(--brand) 45%, transparent), transparent 70%),
-			var(--ink);
-		color: var(--white);
-	}
-
-	&--place .m-badge {
-		align-self: flex-start;
-	}
-
-	&__dots {
-		position: absolute;
-		inset: 0;
-		background-image: radial-gradient(var(--on-dark-border) 1px, transparent 1.4px);
-		background-size: 18px 18px;
-		mask-image: linear-gradient(110deg, transparent 30%, black 100%);
-		pointer-events: none;
-	}
-
-	&__clock {
-		position: relative;
-		display: flex;
-		align-items: baseline;
-		flex-wrap: wrap;
-		gap: 4px 14px;
-	}
-
-	&__time {
-		font-family: var(--font-display);
-		font-size: 56px;
-		font-weight: 700;
-		line-height: 1;
-		letter-spacing: -0.025em;
-		font-variant-numeric: tabular-nums;
-	}
-
-	&__zone {
-		font-family: var(--font-ui);
-		font-size: 15px;
-		color: var(--on-dark-muted);
-	}
-
-	// --- Stack ------------------------------------------------
-	&--stack {
-		grid-area: stack;
-		gap: 24px;
-	}
-
-	&__stack-head {
+	&__skills-head {
 		display: flex;
 		align-items: baseline;
 		justify-content: space-between;
 		flex-wrap: wrap;
-		gap: 6px 24px;
+		gap: 8px 32px;
+		padding-bottom: 28px;
 	}
 
 	&__groups {
 		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-		gap: 24px 32px;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 16px;
 	}
 
 	&__group {
 		--group-color: var(--brand);
+
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+		padding: 28px;
+		border: 1px solid var(--border);
+		border-top: 3px solid var(--group-color);
+		border-radius: var(--radius-lg);
+		background: var(--white);
 
 		&:nth-child(2) {
 			--group-color: var(--accent);
@@ -424,183 +371,145 @@ const time = useLocalTime(localTime.timezone)
 		&:nth-child(3) {
 			--group-color: var(--sun);
 		}
-
-		.tile__chips {
-			padding-top: 12px;
-
-			li {
-				border-color: color-mix(in srgb, var(--group-color) 30%, var(--border));
-				background: color-mix(in srgb, var(--group-color) 8%, var(--white));
-			}
-		}
 	}
 
-	&__group-title {
-		display: flex;
-		align-items: center;
-		gap: 8px;
-		padding-bottom: 10px;
-		border-bottom: 2px solid var(--group-color);
-		font-family: var(--font-display);
-		font-size: 16px;
-		font-weight: 600;
-
-		.m-icon {
-			color: color-mix(in srgb, var(--group-color) 80%, var(--ink));
-		}
-	}
-
-	// --- How I work -------------------------------------------
-	&--work {
-		grid-area: work;
-		gap: 22px;
-		background: linear-gradient(120deg, var(--sun-soft) 0%, var(--white) 60%);
-	}
-
-	// side by side when there's room, stacked when there isn't
-	&__steps {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-		gap: 20px 28px;
-
-		li {
-			display: grid;
-			grid-template-columns: 36px minmax(0, 1fr);
-			gap: 10px;
-		}
-	}
-
-	&__step-number {
-		font-family: var(--font-display);
-		font-size: 20px;
-		font-weight: 700;
-		color: var(--sun-deep);
-	}
-
-	&__step-title {
-		display: block;
-		padding-bottom: 4px;
-		font-family: var(--font-display);
-		font-size: 16px;
-		font-weight: 600;
-		color: var(--text-primary);
-	}
-
-	// --- AI ---------------------------------------------------
-	&--ai {
-		grid-area: ai;
-		gap: 4px;
-		background:
-			radial-gradient(18rem 12rem at 100% 0%, var(--brand-soft), transparent 70%),
-			var(--white);
-
-		.tile__icon {
-			background: var(--brand-strong);
-			color: var(--sun);
-		}
-	}
-
-	// --- Small facts ------------------------------------------
-	&--fact {
-		grid-area: edu;
-		gap: 4px;
-	}
-
-	&--start {
-		grid-area: start;
-	}
-
-	&__icon {
+	&__group-icon {
 		display: grid;
 		place-items: center;
 		width: 44px;
 		height: 44px;
-		margin-bottom: 14px;
+		margin-bottom: 6px;
 		border-radius: var(--radius-sm);
-		background: var(--brand-soft);
-		color: var(--brand-strong);
+		background: color-mix(in srgb, var(--group-color) 14%, var(--white));
+		color: color-mix(in srgb, var(--group-color) 80%, var(--ink));
 	}
 
-	&--start &__icon {
-		background: var(--sun-soft);
-		color: var(--sun-deep);
+	&__chips {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 6px;
+		margin-top: auto;
+		padding-top: 10px;
+
+		li {
+			padding: 5px 11px;
+			border: 1px solid color-mix(in srgb, var(--group-color) 30%, var(--border));
+			border-radius: var(--radius-full);
+			background: color-mix(in srgb, var(--group-color) 8%, var(--white));
+			font-family: var(--font-ui);
+			font-size: 12px;
+			font-weight: 500;
+		}
 	}
 
-	&__fact-label {
-		font-family: var(--font-ui);
-		font-size: 12px;
-		font-weight: 600;
-		letter-spacing: 0.1em;
-		text-transform: uppercase;
-		color: var(--text-muted);
+	// --- How I work ------------------------------------------------------
+	&__how {
+		padding-top: 112px;
 	}
 
-	&__fact-value {
+	&__steps {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 40px;
+		padding-top: 28px;
+	}
+
+	&__step {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+		padding-top: 20px;
+		border-top: 2px solid var(--ink);
+	}
+
+	&__step-number {
 		font-family: var(--font-display);
-		font-size: 17px;
-		font-weight: 600;
+		font-size: 72px;
+		font-weight: 700;
+		line-height: 1;
+		color: transparent;
+		-webkit-text-stroke: 1.5px var(--brand);
+	}
+
+	&__ai {
+		display: flex;
+		align-items: center;
+		gap: 14px;
+		max-width: 860px;
+		margin-top: 48px;
+		padding: 16px 20px;
+		border: 1px dashed var(--border-strong);
+		border-radius: var(--radius-lg);
+		font-size: 15px;
 		line-height: 24px;
-		color: var(--text-primary);
+		color: var(--text-secondary);
+
+		strong {
+			color: var(--text-primary);
+		}
+	}
+
+	&__ai-icon {
+		display: grid;
+		flex-shrink: 0;
+		place-items: center;
+		width: 36px;
+		height: 36px;
+		border-radius: var(--radius-sm);
+		background: var(--brand-strong);
+		color: var(--sun);
 	}
 }
 
-@keyframes tile-pulse {
-	0% {
-		opacity: 0.5;
-		transform: scale(0.6);
-	}
-
-	100% {
-		opacity: 0;
-		transform: scale(1.6);
-	}
-}
-
-@media only screen and (max-width: 1100px) {
-	.about__con {
-		grid-template-columns: repeat(2, minmax(0, 1fr));
-		grid-template-areas:
-			'intro intro'
-			'sites years'
-			'now   place'
-			'stack stack'
-			'work  work'
-			'edu   start'
-			'ai    ai';
-		padding: 88px 0;
-	}
-}
-
-@media only screen and (max-width: 640px) {
-	.about__con {
-		grid-template-columns: minmax(0, 1fr);
-		grid-template-areas:
-			'intro'
-			'sites'
-			'now'
-			'place'
-			'stack'
-			'work'
-			'ai'
-			'years'
-			'edu'
-			'start';
-		padding: 64px 0;
-	}
-
-	.tile {
-		padding: 24px;
-
-		&--intro {
-			padding: 26px;
+@media only screen and (max-width: 1024px) {
+	.about {
+		&__con {
+			padding: 96px 0 88px;
 		}
 
-		&__big {
+		&__body {
+			grid-template-columns: minmax(0, 1fr);
+			padding-top: 72px;
+		}
+
+		&__groups {
+			grid-template-columns: minmax(0, 1fr);
+		}
+
+		&__skills,
+		&__how {
+			padding-top: 88px;
+		}
+	}
+}
+
+@media only screen and (max-width: 700px) {
+	.about {
+		&__con {
+			padding: 72px 0 64px;
+		}
+
+		&__columns {
+			column-count: 1;
+		}
+
+		&__steps {
+			grid-template-columns: minmax(0, 1fr);
+			gap: 28px;
+		}
+
+		&__step-number {
 			font-size: 56px;
 		}
 
-		&__time {
-			font-size: 44px;
+		&__facts,
+		&__group {
+			padding-left: 22px;
+			padding-right: 22px;
+		}
+
+		&__ai {
+			align-items: flex-start;
 		}
 	}
 }
