@@ -7,10 +7,11 @@ cd "$(dirname "$0")"
 
 SERVER="${DEPLOY_SERVER:-ubuntu@51.79.166.95}"
 WEB_ROOT="/var/www/portfolio"
-SITE="https://chaimel.51.79.166.95.nip.io"
+SITE="https://chaimel.tukod.dev"
 
-echo "==> Building the site"
-npm run generate
+# siteUrl drives the canonical and og: tags (see nuxt.config.ts).
+echo "==> Building the site for ${SITE}"
+NUXT_PUBLIC_SITE_URL="$SITE" npm run generate
 
 # Upload into a fresh folder first, then swap it in, so visitors never see a
 # half-copied site. The previous version is removed once the new one is live.
